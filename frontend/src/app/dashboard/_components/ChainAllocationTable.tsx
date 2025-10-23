@@ -94,7 +94,7 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
   };
 
   return (
-    <div className={`card bg-base-100 shadow-xl border border-base-300 ${className}`}>
+    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Chain Allocation</h3>
@@ -116,7 +116,7 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="table table-zebra w-full">
+          <table className="table w-full">
             <thead>
               <tr>
                 <th className="text-left">Chain</th>
@@ -129,7 +129,7 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
             </thead>
             <tbody>
               {chainAllocations.map((chain) => (
-                <tr key={chain.id} className="hover:bg-base-200">
+                <tr key={chain.id} className="hover:bg-gray-100">
                   <td>
                     <div className="flex items-center gap-3">
                       <div

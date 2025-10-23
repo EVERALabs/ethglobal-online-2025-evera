@@ -50,7 +50,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
   // Calculate cumulative percentage for pie chart segments
 
   return (
-    <div className={`card bg-base-100 shadow-xl border border-base-300 ${className}`}>
+    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Portfolio Distribution</h3>
@@ -64,7 +64,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Pie Chart Visualization */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center hover:">
             <div className="relative w-48 h-48">
               <svg
                 className="w-full h-full transform -rotate-90"
@@ -77,7 +77,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
                   const strokeDashoffset = circumference - (chain.allocation / 100) * circumference;
                   
                   return (
-                    <circle
+                    <circle 
                       key={index}
                       cx="50"
                       cy="50"
@@ -87,7 +87,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
                       strokeWidth="8"
                       strokeDasharray={strokeDasharray}
                       strokeDashoffset={strokeDashoffset}
-                      className="transition-all duration-300 hover:stroke-width-10"
+                      className="transition-all duration-300 hover:stroke-width-10 hover:stroke-primary"
                       style={{
                         strokeDashoffset: strokeDashoffset,
                       }}
@@ -111,7 +111,7 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
             {chainData.map((chain, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+                className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <div

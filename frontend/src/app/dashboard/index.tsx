@@ -25,11 +25,11 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200/30">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <div className="space-y-8">
           {/* Page Header */}
-          <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
                 <h1 className="text-4xl font-primary font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -83,7 +83,7 @@ const DashboardPage: React.FC = () => {
 
             <div className="space-y-6">
               {/* User Info Card */}
-              <div className="card bg-base-100 shadow-xl border border-base-300">
+              <div className="card bg-white shadow-xl border border-gray-200">
                 <div className="card-body p-6">
                   <h3 className="card-title text-xl font-primary mb-4">Account Info</h3>
                   <div className="space-y-4">

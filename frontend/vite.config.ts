@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    allowedHosts: ['pure-l.kadzu.dev'],
+    allowedHosts: ['staging-pure-l.kadzu.dev'],
   },
 })
