@@ -18,3 +18,17 @@
 
 # Hardhat coverage reports
 /coverage
+
+.env
+
+# Foundry
+/out
+/cache
+/target
+/lib
+/script
+/script
+/script
+/script
+/script
+/script
