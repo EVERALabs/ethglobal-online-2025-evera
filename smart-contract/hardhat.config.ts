@@ -6,11 +6,26 @@ import { configVariable } from "hardhat/config";
 const config: HardhatUserConfig = {
   plugins: [hardhatToolboxViemPlugin],
   solidity: {
-    profiles: {
-      default: {
-        version: "0.8.28",
+    compilers: [
+      {
+        version: "0.7.6",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 800,
+          },
+        },
       },
-      production: {
+      {
+        version: "0.8.13",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+      {
         version: "0.8.28",
         settings: {
           optimizer: {
@@ -19,7 +34,46 @@ const config: HardhatUserConfig = {
           },
         },
       },
-    },
+    ],
+    // overrides: {
+    //   "node_modules/@uniswap/v3-core/contracts/libraries/FullMath.sol": {
+    //     version: "0.7.6",
+    //     settings: {
+    //       optimizer: {
+    //         enabled: true,
+    //         runs: 800,
+    //       },
+    //     },
+    //   },
+    //   "node_modules/@uniswap/v3-periphery/contracts/libraries/LiquidityAmounts.sol":
+    //     {
+    //       version: "0.8.0",
+    //       settings: {
+    //         optimizer: {
+    //           enabled: true,
+    //           runs: 800,
+    //         },
+    //       },
+    //     },
+    //   "@uniswap/v3-core/contracts/**/*": {
+    //     version: "0.8.0",
+    //     settings: {
+    //       optimizer: {
+    //         enabled: true,
+    //         runs: 800,
+    //       },
+    //     },
+    //   },
+    //   "@uniswap/v3-periphery/contracts/**/*": {
+    //     version: "0.8.0",
+    //     settings: {
+    //       optimizer: {
+    //         enabled: true,
+    //         runs: 800,
+    //       },
+    //     },
+    //   },
+    // },
   },
   networks: {
     hardhatMainnet: {

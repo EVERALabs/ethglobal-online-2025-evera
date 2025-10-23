@@ -2,10 +2,28 @@
   "name": "smart-contract",
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "test": "hardhat test",
+    "test:verbose": "hardhat test --verbose",
+    "test:specific": "hardhat test test/",
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "coverage": "hardhat coverage",
+    "deploy": "hardhat ignition deploy ignition/modules/",
+    "forge:test": "forge test",
+    "forge:test:verbose": "forge test -vvv"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "@uniswap/v3-core": "https://github.com/Uniswap/v3-core/tree/0.8",
+    "@uniswap/v3-periphery": "https://github.com/Uniswap/v3-periphery/tree/0.8"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^3.0.3",
     "@nomicfoundation/hardhat-toolbox-viem": "^5.0.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.18.12",
+    "chai": "^6.2.0",
     "forge-std": "github:foundry-rs/forge-std#v1.9.4",
     "hardhat": "^3.0.9",
     "typescript": "~5.8.0",
