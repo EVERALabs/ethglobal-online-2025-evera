@@ -1,0 +1,128 @@
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useWeb3 } from '../../hooks/useWeb3';
+import { DepositForm } from './_components/DepositForm';
+import { BestChainSuggestion } from './_components/BestChainSuggestion';
+import { SimulationPreview } from './_components/SimulationPreview';
+import { ConfirmModal } from './_components/ConfirmModal';
+import { SuccessState } from './_components/SuccessState';
+
+interface DepositData {
+  amount: string;
+  token: string;
+  chain: string;
+  projectedAllocation: {
+    [chain: string]: number;
+  };
+  gasEstimate: number;
+  bridgePath: string[];
+}
+
+const DepositPage: React.FC = () => {
+  const { user } = useAuth();
+  const { isConnected } = useWeb3();
+  const [depositData, setDepositData] = useState<DepositData | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleDepositSubmit = (data: DepositData) => {
+    setDepositData(data);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmDeposit = async () => {
+    setIsProcessing(true);
+    setShowConfirmModal(false);
+    
+    // Simulate transaction processing
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    setIsProcessing(false);
+    setShowSuccess(true);
+  };
+
+  const handleViewDashboard = () => {
+    window.location.href = '/dashboard';
+  };
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
+          <p className="opacity-70">You need to be logged in to make deposits.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isConnected) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">Wallet Not Connected</h2>
+          <p className="opacity-70">Please connect your wallet to make deposits.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (showSuccess) {
+    return <SuccessState onViewDashboard={handleViewDashboard} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-base-200/30">
+      <div className="container mx-auto px-6 py-8 max-w-7xl">
+        <div className="space-y-8">
+          {/* Page Header */}
+          <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                Deposit Liquidity
+              </h1>
+              <p className="text-lg opacity-70">
+                Add PYUSD or other stablecoins to optimize across chains
+              </p>
+            </div>
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="px-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left Column - Deposit Form */}
+              <div className="lg:col-span-2 space-y-6">
+                <DepositForm onSubmit={handleDepositSubmit} />
+                
+                {depositData && (
+                  <SimulationPreview 
+                    data={depositData}
+                    onConfirm={() => setShowConfirmModal(true)}
+                  />
+                )}
+              </div>
+
+              {/* Right Column - Best Chain Suggestion */}
+              <div className="space-y-6">
+                <BestChainSuggestion />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Confirm Modal */}
+        {showConfirmModal && depositData && (
+          <ConfirmModal
+            data={depositData}
+            isProcessing={isProcessing}
+            onConfirm={handleConfirmDeposit}
+            onCancel={() => setShowConfirmModal(false)}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default DepositPage;
