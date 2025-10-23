@@ -63,7 +63,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
   if (currentStep === 'success') {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-base-100 rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
           <div className="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -94,7 +94,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-base-100 rounded-2xl shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
@@ -104,7 +104,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
               </svg>
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-base-content">Confirm Settings Update</h2>
+              <h2 className="text-2xl font-bold text-black">Confirm Settings Update</h2>
               <p className="text-sm opacity-70">Review changes before submitting transaction</p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
             {/* Changes Summary */}
             <div className="space-y-6">
               {/* Strategy Parameters */}
-              <div className="p-4 bg-base-200 rounded-lg">
+              <div className="p-4 bg-white rounded-lg">
                 <h3 className="font-semibold mb-3 flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
@@ -152,7 +152,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
               </div>
 
               {/* Chain Whitelist */}
-              <div className="p-4 bg-base-200 rounded-lg">
+              <div className="p-4 bg-white rounded-lg">
                 <h3 className="font-semibold mb-3 flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" />
@@ -172,7 +172,7 @@ export const SaveChangesModal: React.FC<SaveChangesModalProps> = ({
               </div>
 
               {/* Transaction Details */}
-              <div className="p-4 bg-base-200 rounded-lg">
+              <div className="p-4 bg-white rounded-lg">
                 <h3 className="font-semibold mb-3 flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

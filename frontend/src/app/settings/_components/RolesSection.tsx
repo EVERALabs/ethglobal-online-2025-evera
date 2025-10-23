@@ -92,7 +92,7 @@ export const RolesSection: React.FC = () => {
   };
 
   return (
-    <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-accent/10 rounded-lg">
@@ -101,7 +101,7 @@ export const RolesSection: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-base-content">Protocol Roles</h2>
+            <h2 className="text-2xl font-bold text-black">Protocol Roles</h2>
             <p className="text-sm opacity-70">View operator addresses and multisig configurations</p>
           </div>
         </div>
@@ -115,12 +115,12 @@ export const RolesSection: React.FC = () => {
         {ROLES_DATA.map((role, index) => (
           <div
             key={index}
-            className="p-4 rounded-lg border border-base-300 bg-base-50 hover:bg-base-100 transition-colors duration-200"
+            className="p-4 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 transition-colors duration-200"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-3 mb-2">
-                  <h3 className="font-semibold text-base-content">{role.name}</h3>
+                  <h3 className="font-semibold text-black">{role.name}</h3>
                   {getRoleTypeBadge(role.type)}
                   {getStatusBadge(role.status)}
                 </div>
@@ -129,7 +129,7 @@ export const RolesSection: React.FC = () => {
 
                 {/* Address */}
                 <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-sm font-mono bg-base-200 px-2 py-1 rounded">
+                  <span className="text-sm font-mono bg-white px-2 py-1 rounded">
                     {formatAddress(role.address)}
                   </span>
                   <button
@@ -154,7 +154,7 @@ export const RolesSection: React.FC = () => {
 
                 {/* Multisig Details */}
                 {role.type === 'multisig' && role.threshold && role.signers && (
-                  <div className="mt-3 p-3 bg-primary/5 rounded-lg">
+                  <div className="mt-3 p-3 bg-white rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold">Multisig Configuration</span>
                       <span className="badge badge-primary badge-sm">
@@ -164,10 +164,10 @@ export const RolesSection: React.FC = () => {
                     <div className="space-y-1">
                       {role.signers.map((signer, signerIndex) => (
                         <div key={signerIndex} className="flex items-center space-x-2 text-xs">
-                          <span className="w-4 h-4 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">
+                          <span className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-primary font-bold">
                             {signerIndex + 1}
                           </span>
-                          <span className="font-mono bg-base-200 px-2 py-1 rounded">
+                          <span className="font-mono bg-white px-2 py-1 rounded">
                             {formatAddress(signer)}
                           </span>
                           <button
@@ -190,7 +190,7 @@ export const RolesSection: React.FC = () => {
       </div>
 
       {/* Governance Info */}
-      <div className="mt-6 p-4 bg-base-200 rounded-lg">
+      <div className="mt-6 p-4 bg-white rounded-lg">
         <h3 className="font-semibold mb-2 text-sm opacity-70">Governance Information</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
