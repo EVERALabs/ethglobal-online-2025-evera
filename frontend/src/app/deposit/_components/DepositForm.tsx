@@ -71,7 +71,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ onSubmit }) => {
   };
 
   return (
-    <div className="bg-base-100/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-base-300/50">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <h2 className="text-2xl font-bold mb-6">Deposit Form</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,7 +91,7 @@ export const DepositForm: React.FC<DepositFormProps> = ({ onSubmit }) => {
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="input input-bordered w-full pr-20 text-lg"
+              className="input input-bordered w-full pr-20 text-lg bg-white"
               required
             />
             <button

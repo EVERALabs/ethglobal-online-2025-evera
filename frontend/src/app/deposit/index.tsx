@@ -73,11 +73,11 @@ const DepositPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200/30">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-6 py-8 max-w-7xl">
         <div className="space-y-8">
           {/* Page Header */}
-          <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
             <div className="text-center">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
                 Deposit Liquidity
