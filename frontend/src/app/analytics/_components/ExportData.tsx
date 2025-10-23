@@ -143,7 +143,7 @@ export const ExportData: React.FC<ExportDataProps> = ({ timeframe, selectedChain
   const apiEndpoint = `https://api.evera.xyz/v1/analytics?timeframe=${timeframe}&chains=${selectedChains.join(',')}&format=json`;
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -162,7 +162,7 @@ export const ExportData: React.FC<ExportDataProps> = ({ timeframe, selectedChain
               key={format.id}
               onClick={() => handleExport(format.id)}
               disabled={isExporting || selectedChains.length === 0}
-              className="btn btn-outline flex items-center gap-3 p-4 h-auto"
+              className="btn btn-outline flex items-center gap-3 p-4 h-auto border border-gray-200"
             >
               <div className="text-2xl">{format.icon}</div>
               <div className="text-left">
@@ -180,7 +180,7 @@ export const ExportData: React.FC<ExportDataProps> = ({ timeframe, selectedChain
 
         {/* API Endpoint Display */}
         {showApiEndpoint && (
-          <div className="bg-base-200 rounded-lg p-4 border border-base-300 mb-6">
+          <div className="bg-white rounded-lg p-4 border border-gray-200 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h4 className="font-semibold">API Endpoint</h4>
               <button
@@ -212,19 +212,19 @@ export const ExportData: React.FC<ExportDataProps> = ({ timeframe, selectedChain
 
         {/* Export Info */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="bg-base-200/50 rounded-lg p-3">
+          <div className="bg-white rounded-lg p-3">
             <div className="font-semibold mb-1">Data Points</div>
             <div className="opacity-70">
               {timeframe === '24h' ? '24' : timeframe === '7d' ? '7' : '30'} × {selectedChains.length} chains
             </div>
           </div>
-          <div className="bg-base-200/50 rounded-lg p-3">
+          <div className="bg-white rounded-lg p-3">
             <div className="font-semibold mb-1">Last Updated</div>
             <div className="opacity-70">
               {new Date().toLocaleString()}
             </div>
           </div>
-          <div className="bg-base-200/50 rounded-lg p-3">
+          <div className="bg-white rounded-lg p-3">
             <div className="font-semibold mb-1">Rate Limit</div>
             <div className="opacity-70">
               100 requests/hour

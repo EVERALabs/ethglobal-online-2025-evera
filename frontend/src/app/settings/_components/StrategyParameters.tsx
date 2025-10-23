@@ -36,7 +36,7 @@ export const StrategyParameters: React.FC<StrategyParametersProps> = ({
   };
 
   return (
-    <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-primary/10 rounded-lg">
@@ -176,7 +176,7 @@ export const StrategyParameters: React.FC<StrategyParametersProps> = ({
       </div>
 
       {/* Current Settings Summary */}
-      <div className="mt-6 p-4 bg-base-200 rounded-lg">
+      <div className="mt-6 p-4 bg-white rounded-lg">
         <h3 className="font-semibold mb-2 text-sm opacity-70">Current Configuration</h3>
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="flex justify-between">

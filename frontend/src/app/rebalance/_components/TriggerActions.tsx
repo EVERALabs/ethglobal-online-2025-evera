@@ -54,7 +54,7 @@ export const TriggerActions: React.FC<TriggerActionsProps> = ({
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-gray-100 shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <h3 className="card-title text-xl text-primary mb-6">
           ⚡ Trigger Actions
@@ -109,11 +109,11 @@ export const TriggerActions: React.FC<TriggerActionsProps> = ({
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-base-200 rounded-lg text-center">
+              <div className="p-3 bg-white rounded-lg text-center">
                 <div className="text-sm opacity-70">Estimated Gas</div>
                 <div className="font-bold text-info">{simulationResult.estimatedGas}</div>
               </div>
-              <div className="p-3 bg-base-200 rounded-lg text-center">
+              <div className="p-3 bg-white rounded-lg text-center">
                 <div className="text-sm opacity-70">Estimated Time</div>
                 <div className="font-bold text-warning">{simulationResult.estimatedTime}</div>
               </div>
@@ -138,7 +138,7 @@ export const TriggerActions: React.FC<TriggerActionsProps> = ({
             </div>
 
             {/* Expected Outcome */}
-            <div className="p-4 bg-base-200 rounded-lg">
+            <div className="p-4 bg-white rounded-lg">
               <h5 className="font-semibold mb-3 text-primary">Expected Outcome</h5>
               <div className="grid grid-cols-1 gap-3">
                 <div className="flex justify-between items-center">
@@ -171,7 +171,7 @@ export const TriggerActions: React.FC<TriggerActionsProps> = ({
             </div>
 
             {/* New Allocation Preview */}
-            <div className="p-4 bg-base-200 rounded-lg">
+            <div className="p-4 bg-white rounded-lg">
               <h5 className="font-semibold mb-3 text-primary">New Allocation</h5>
               <div className="space-y-2">
                 {Object.entries(simulationResult.newAllocation).map(([chain, percentage]) => (
