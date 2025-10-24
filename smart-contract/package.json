@@ -6,6 +6,12 @@
     "test": "hardhat test",
     "test:verbose": "hardhat test --verbose",
     "test:specific": "hardhat test test/",
+    "test:integration": "tsx test-integration/runner/testRunner.ts",
+    "test:integration:verbose": "tsx test-integration/runner/testRunner.ts -- --verbose",
+    "test:integration:comprehensive": "tsx test-integration/runner/testRunner.ts -- --pattern '**/PositionManager.comprehensive.test.ts'",
+    "test:integration:basic": "tsx test-integration/runner/testRunner.ts -- --pattern '**/PositionManager.integration.test.ts'",
+    "test:integration:coverage": "tsx test-integration/runner/testRunner.ts -- --coverage",
+    "test:all": "npm run test && npm run test:integration",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
     "coverage": "hardhat coverage",
@@ -16,16 +22,20 @@
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.0",
     "@uniswap/v3-core": "https://github.com/Uniswap/v3-core/tree/0.8",
-    "@uniswap/v3-periphery": "https://github.com/Uniswap/v3-periphery/tree/0.8"
+    "@uniswap/v3-periphery": "https://github.com/Uniswap/v3-periphery/tree/0.8",
+    "dotenv": "^17.2.3"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^3.0.3",
     "@nomicfoundation/hardhat-toolbox-viem": "^5.0.0",
+    "@nomicfoundation/hardhat-viem": "^3.0.0",
+    "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.18.12",
     "chai": "^6.2.0",
     "forge-std": "github:foundry-rs/forge-std#v1.9.4",
     "hardhat": "^3.0.9",
+    "tsx": "^4.7.0",
     "typescript": "~5.8.0",
     "viem": "^2.38.3"
   }

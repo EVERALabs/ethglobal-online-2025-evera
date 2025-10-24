@@ -16,9 +16,7 @@ contract PositionRegistry is ERC721 {
     IERC20 public immutable token1;
     address public immutable MANAGER;
 
-    constructor(
-        address manager
-    ) ERC721("Bloom Finance Position Registry", "BLOOM") {
+    constructor(address manager) ERC721("PureL Position Registry", "PUREL") {
         MANAGER = manager;
     }
 

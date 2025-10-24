@@ -1,10 +1,11 @@
 import type { HardhatUserConfig } from "hardhat/config";
+import hardhatViem from "@nomicfoundation/hardhat-viem";
 
 import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
 import { configVariable } from "hardhat/config";
 
 const config: HardhatUserConfig = {
-  plugins: [hardhatToolboxViemPlugin],
+  plugins: [hardhatToolboxViemPlugin, hardhatViem],
   solidity: {
     compilers: [
       {
@@ -85,11 +86,19 @@ const config: HardhatUserConfig = {
       type: "edr-simulated",
       chainType: "op",
     },
+    hardhatBase: {
+      type: "edr-simulated",
+      chainType: "l1",
+    },
+    hardhatArb: {
+      type: "edr-simulated",
+      chainType: "l1",
+    },
     sepolia: {
       type: "http",
       chainType: "l1",
-      url: configVariable("SEPOLIA_RPC_URL"),
-      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+      url: configVariable("SEPOLIAARB_RPC_URL"),
+      accounts: [configVariable("PRIVATE_KEY")],
     },
   },
 };
