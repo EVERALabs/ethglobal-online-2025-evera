@@ -18,6 +18,13 @@ import {ISwapRouter} from "../contracts/interfaces/ISwapRouter.sol";
 import {PositionManagerRouter} from "../contracts/modules/PositionManager.sol";
 
 contract PositionManagerTest is Test {
+    // Environment addresses
+    address public NONFUNGIBLE_ARB_SEPOLIA =
+        0x6b2937Bde17889EDCf8fbD8dE31C3C2a70Bc4d65;
+    address public NONFUNGIBLE_BASE_SEPOLIA =
+        0x27F971cb582BF9E50F397e4d29a5C7A34f11faA2;
+    address public SWAP_ROUTER_ARB = 0x101F443B4d1b059569D643917553c771E1b9663E;
+
     PositionManagerRouter public positionManagerRouter;
     MockLP public mockLP;
     MockUSDC public mockUSDC;
@@ -25,10 +32,10 @@ contract PositionManagerTest is Test {
     address public token0;
     address public token1;
     INonfungiblePositionManager public nonfungiblePositionManagerARB =
-        INonfungiblePositionManager(vm.envAddress("NONFUNGIBLEARBSEPOLIA"));
+        INonfungiblePositionManager(NONFUNGIBLE_ARB_SEPOLIA);
     INonfungiblePositionManager public nonfungiblePositionManagerETH =
-        INonfungiblePositionManager(vm.envAddress("NONFUNGIBLEBASESEPOLIA"));
-    ISwapRouter public swapRouter = ISwapRouter(vm.envAddress("SWAPROUTERARB"));
+        INonfungiblePositionManager(NONFUNGIBLE_BASE_SEPOLIA);
+    ISwapRouter public swapRouter = ISwapRouter(SWAP_ROUTER_ARB);
     PositionRegistry public positionRegistry;
     address public pool;
     address expectedPositionManagerAddress;
@@ -37,7 +44,9 @@ contract PositionManagerTest is Test {
     address bob = makeAddr("bob");
 
     function setUp() public {
-        vm.createSelectFork(vm.envString("SEPOLIAARB_RPC_URL"));
+        vm.createSelectFork(
+            "https://arb-sepolia.g.alchemy.com/v2/IpWFQVx6ZTeZyG85llRd7h6qRRNMqErS"
+        );
 
         uint64 nonce = vm.getNonce(address(this));
         expectedPositionManagerAddress = vm.computeCreateAddress(
