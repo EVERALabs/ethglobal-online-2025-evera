@@ -42,7 +42,7 @@ export class UsersService {
     return this.prisma.user.findUnique({
       where: { id },
       include: {
-        notes: true,
+        SimpleNote: true,
       },
     });
   }
