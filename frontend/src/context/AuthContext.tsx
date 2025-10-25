@@ -75,10 +75,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+
+    // Clear all auth-related localStorage items
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.USER);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.TOKEN);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.ROLE);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.AUTH_PROVIDER);
+
+    // Clear any other wallet-related storage
+    localStorage.removeItem("evera_auth_provider");
+
+    // Clear any wagmi/wallet connect storage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key &&
+        (key.startsWith("wagmi") ||
+          key.startsWith("walletconnect") ||
+          key.startsWith("wc@2"))
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+
+    console.log("User logged out and all storage cleared");
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -104,6 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {

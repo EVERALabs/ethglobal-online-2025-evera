@@ -1,21 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useWeb3 } from "../../hooks/useWeb3";
-import { AUTH_PROVIDERS, type AuthProvider } from "../../const/auth";
-import { ROLES } from "../../const/roles";
+import { AUTH_PROVIDERS } from "../../const/auth";
+import { ROLES, type Role } from "../../const/roles";
 import { generateId } from "../../lib/utils";
-import { AuthProviderSelector } from "./_components/AuthProviderSelector";
 import { LoginForm } from "./_components/LoginForm";
 
 const LoginPage: React.FC = () => {
   const { isAuthenticated, login } = useAuth();
-  const { connect, isConnecting } = useWeb3();
+  const { connect, isConnecting, address, isConnected } = useWeb3();
   const location = useLocation();
-  const [selectedProvider, setSelectedProvider] = useState<AuthProvider>(
-    AUTH_PROVIDERS.PRIVY
-  );
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingRole, setPendingRole] = useState<string | null>(null);
+
+  // Handle successful wallet connection
+  useEffect(() => {
+    if (isConnected && address && pendingRole) {
+      const user = {
+        id: generateId(),
+        address: address,
+        email: `user@rainbow.com`,
+        name: `Rainbow User`,
+        role: pendingRole as Role,
+        avatar: `https://ui-avatars.com/api/?name=Rainbow&background=random`,
+      };
+
+      login(user);
+      setPendingRole(null);
+      setIsLoading(false);
+    }
+  }, [isConnected, address, pendingRole, login]);
+
+  // Reset loading state if connection fails or is cancelled
+  useEffect(() => {
+    if (!isConnecting && !isConnected && pendingRole) {
+      setIsLoading(false);
+      setPendingRole(null);
+    }
+  }, [isConnecting, isConnected, pendingRole]);
 
   // Redirect if already authenticated
   if (isAuthenticated) {
@@ -23,32 +46,22 @@ const LoginPage: React.FC = () => {
     return <Navigate to={from} replace />;
   }
 
-  const handleConnect = async (
-    provider: string,
-    demoRole: string = ROLES.USER
-  ) => {
+  const handleConnect = async (demoRole: string = ROLES.USER) => {
     setIsLoading(true);
+    setPendingRole(demoRole);
+
     try {
-      // Connect to Web3 provider
-      await connect(provider as any);
-
-      // Simulate authentication - in real app, this would come from the provider
-      const mockUser = {
-        id: generateId(),
-        address: "0x742d35Cc6634C0532925a3b8D0C4E5e3d2c0b98e",
-        email: `user@${provider}.com`,
-        name: `${provider.charAt(0).toUpperCase() + provider.slice(1)} User`,
-        role: demoRole as any,
-        avatar: `https://ui-avatars.com/api/?name=${provider}&background=random`,
-      };
-
-      login(mockUser);
+      // Connect to Rainbow wallet
+      await connect(AUTH_PROVIDERS.RAINBOW);
+      console.log("Wallet connection initiated...");
+      // Connection success will be handled by useEffect when isConnected becomes true
     } catch (error) {
       console.error("Login failed:", error);
-      // Handle error - show toast, etc.
-    } finally {
-      setIsLoading(false);
+      setPendingRole(null);
+      // Don't re-throw here, just handle it gracefully
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -61,53 +74,39 @@ const LoginPage: React.FC = () => {
             <div className="flex justify-center mb-4">
               <img src="/purel-logo.png" alt="PureL Logo" className="h-10" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome Back
+            </h1>
             <p className="text-gray-600">Connect your wallet to continue</p>
-          </div>
-
-          {/* Auth Provider Selector */}
-          <div className="mb-6">
-            <AuthProviderSelector
-              selectedProvider={selectedProvider}
-              onProviderChange={setSelectedProvider}
-            />
-          </div>
-
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">Choose your role</span>
-            </div>
           </div>
 
           {/* Login Form with Demo Roles */}
           <LoginForm
             onConnect={handleConnect}
-            selectedProvider={selectedProvider}
             isLoading={isLoading || isConnecting}
           />
         </div>
 
         {/* Demo Info */}
         <div className="mt-6 bg-blue-50 rounded-xl p-4 border border-blue-200">
-          <h3 className="font-semibold text-sm text-blue-900 mb-2">Demo Information</h3>
+          <h3 className="font-semibold text-sm text-blue-900 mb-2">
+            Rainbow Wallet Setup
+          </h3>
           <div className="text-xs text-blue-700 space-y-1">
-            <p>• This is a demo implementation</p>
-            <p>• Real wallet integration requires proper setup</p>
-            <p>• Environment variables needed for production</p>
+            <p>• Install Rainbow Wallet browser extension</p>
+            <p>• Make sure you have some ETH for transactions</p>
+            <p>• Connect to supported networks (Ethereum, Polygon, etc.)</p>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6 text-sm text-gray-500">
           <p>
-            By connecting, you agree to our{' '}
+            By connecting, you agree to our{" "}
             <button className="text-blue-600 hover:text-blue-700 underline">
               Terms of Service
-            </button>{' '}
-            and{' '}
+            </button>{" "}
+            and{" "}
             <button className="text-blue-600 hover:text-blue-700 underline">
               Privacy Policy
             </button>

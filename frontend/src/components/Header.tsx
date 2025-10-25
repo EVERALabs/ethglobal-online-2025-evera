@@ -16,19 +16,32 @@ export const Header: React.FC = () => {
       setIsScrolled(window.scrollY > 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = async () => {
     try {
+      console.log("Starting logout process...");
+
+      // First disconnect the wallet
       if (isConnected) {
+        console.log("Disconnecting wallet...");
         await disconnect();
       }
+
+      // Then logout from auth context (this clears localStorage)
       logout();
-      navigate("/");
+
+      // Navigate to home page
+      navigate("/", { replace: true });
+
+      console.log("Logout completed successfully");
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if wallet disconnect fails, still logout from auth
+      logout();
+      navigate("/", { replace: true });
     }
   };
 
@@ -47,10 +60,13 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-      ? 'bg-white/98 backdrop-blur-md shadow-sm border-b border-gray-200'
-      : 'bg-white/95 backdrop-blur-md border-b border-gray-100'
-      }`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-white/98 backdrop-blur-md shadow-sm border-b border-gray-200"
+          : "bg-white/95 backdrop-blur-md border-b border-gray-100"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo - pure-L minimal */}
@@ -96,8 +112,16 @@ export const Header: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <div className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-900 text-white">
                   <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </div>
                   <span className="text-sm font-medium">
@@ -106,12 +130,25 @@ export const Header: React.FC = () => {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="p-2 rounded-lg transition-all duration-200 text-gray-500 hover:text-red-600 hover:bg-red-50"
-                  title="Disconnect"
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-red-600 hover:bg-red-50 border border-gray-200 hover:border-red-200"
+                  title="Logout & Disconnect Wallet"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
                   </svg>
+                  <span className="text-sm font-medium hidden sm:block">
+                    Logout
+                  </span>
                 </button>
               </div>
             ) : (
@@ -125,8 +162,18 @@ export const Header: React.FC = () => {
 
             {/* Mobile menu button */}
             <button className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
