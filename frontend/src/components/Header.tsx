@@ -9,6 +9,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 const navLinks = [
   // { name: "Dashboard", path: "/dashboard" },
   { name: "Deposit", path: "/deposit" },
+  { name: "Liquidity Pools", path: "/liquidity-pools" },
   { name: "Analytics", path: "/analytics" },
   { name: "Rebalance", path: "/rebalance" },
   { name: "Settings", path: "/settings" },
