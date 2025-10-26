@@ -134,11 +134,71 @@ export const usePositionContract = () => {
     }
   };
 
+  /**
+   * Mint a new position NFT with specified parameters
+   *
+   * @param params - Mint parameters object containing owner, token0, token1, fee, amounts, and deadline
+   * @param type_ - The rebalance type (enum)
+   * @param pool_ - The pool address
+   * @returns Promise that resolves to the minted NFT ID
+   * @example
+   * ```tsx
+   * const { useMint } = usePositionContract();
+   * const nftId = await useMint({
+   *   owner: "0x...",
+   *   token0: "0x...",
+   *   token1: "0x...",
+   *   fee: 3000,
+   *   amount0Desired: parseUnits("100", 18),
+   *   amount1Desired: parseUnits("200", 18),
+   *   deadline: BigInt(Math.floor(Date.now() / 1000) + 3600)
+   * }, 0, "0x...");
+   * ```
+   */
+  const useMint = async (
+    params: {
+      owner: Address;
+      token0: Address;
+      token1: Address;
+      fee: number;
+      amount0Desired: bigint;
+      amount1Desired: bigint;
+      deadline: bigint;
+    },
+    type_: number,
+    pool_: Address
+  ): Promise<bigint> => {
+    try {
+      if (!config.address) {
+        throw new Error("Contract address not configured for this network");
+      }
+
+      if (!address) {
+        throw new Error("Wallet not connected");
+      }
+
+      // Call the _mint function
+      const hash = await writeContract({
+        address: config.address,
+        abi: PositionContractAbi,
+        functionName: "_mint",
+        args: [params, type_, pool_],
+        chainId: NETWORKS.SEPOLIA,
+      });
+
+      return hash as unknown as bigint;
+    } catch (error) {
+      console.error("Error minting position:", error);
+      throw error;
+    }
+  };
+
   return {
     // Functions
     createPosition,
     initialize,
     rebalance,
+    useMint,
 
     // State
     isPending,
@@ -170,6 +230,19 @@ export interface UsePositionContractReturn {
     mintTokenId: bigint,
     deadline: bigint
   ) => Promise<void>;
+  useMint: (
+    params: {
+      owner: Address;
+      token0: Address;
+      token1: Address;
+      fee: number;
+      amount0Desired: bigint;
+      amount1Desired: bigint;
+      deadline: bigint;
+    },
+    type_: number,
+    pool_: Address
+  ) => Promise<bigint>;
   isPending: boolean;
   isConfirming: boolean;
   isConfirmed: boolean;
