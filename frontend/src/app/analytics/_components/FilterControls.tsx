@@ -45,7 +45,7 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Timeframe Selection */}

@@ -141,7 +141,7 @@ export const ChainWhitelist: React.FC<ChainWhitelistProps> = ({
   const totalChains = CHAIN_DATA.length;
 
   return (
-    <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-secondary/10 rounded-lg">
@@ -150,7 +150,7 @@ export const ChainWhitelist: React.FC<ChainWhitelistProps> = ({
             </svg>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-base-content">Chain Whitelist</h2>
+            <h2 className="text-2xl font-bold text-black">Chain Whitelist</h2>
             <p className="text-sm opacity-70">
               Manage active chains for liquidity distribution
             </p>
@@ -164,7 +164,7 @@ export const ChainWhitelist: React.FC<ChainWhitelistProps> = ({
       </div>
 
       {/* Bulk Actions */}
-      <div className="flex items-center justify-between mb-6 p-4 bg-base-200 rounded-lg">
+      <div className="flex items-center justify-between mb-6 p-4 bg-white rounded-lg">
         <div className="flex items-center space-x-2">
           <button
             onClick={handleSelectAll}
@@ -209,13 +209,13 @@ export const ChainWhitelist: React.FC<ChainWhitelistProps> = ({
                 {/* Chain Info */}
                 <div className="flex items-center space-x-3">
                   <div className={`w-8 h-8 rounded-full ${chain.color} flex items-center justify-center`}>
-                    <span className="text-white text-xs font-bold">
+                    <span className="text-white text-xs font-bold ">
                       {chain.symbol.charAt(0)}
                     </span>
                   </div>
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="font-semibold text-base-content">{chain.name}</h3>
+                      <h3 className="font-semibold text-black">{chain.name}</h3>
                       {getStatusBadge(chain.status)}
                     </div>
                     <p className="text-sm opacity-70">Chain ID: {chain.id}</p>
@@ -256,7 +256,7 @@ export const ChainWhitelist: React.FC<ChainWhitelistProps> = ({
       </div>
 
       {/* Summary */}
-      <div className="mt-6 p-4 bg-base-200 rounded-lg">
+      <div className="mt-6 p-4 bg-white rounded-lg">
         <h3 className="font-semibold mb-2 text-sm opacity-70">Active Chains Summary</h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>

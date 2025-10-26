@@ -114,7 +114,7 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
   };
 
   return (
-    <div className={`card bg-base-100 shadow-xl border border-base-300 ${className}`}>
+    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Recent Rebalance Log</h3>
@@ -127,7 +127,7 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
           {rebalanceEntries.map((entry) => (
             <div
               key={entry.id}
-              className="flex items-center justify-between p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-colors"
+              className="flex items-center justify-between p-4 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-center">

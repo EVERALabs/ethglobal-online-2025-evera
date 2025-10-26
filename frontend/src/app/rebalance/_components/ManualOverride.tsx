@@ -105,7 +105,7 @@ export const ManualOverride: React.FC = () => {
   const totalStatus = getTotalStatus();
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl text-primary">
@@ -142,7 +142,7 @@ export const ManualOverride: React.FC = () => {
         {/* Chain Allocation Controls */}
         <div className="space-y-4">
           {allocations.map((chain, index) => (
-            <div key={chain.chain} className="p-4 bg-base-200 rounded-lg">
+            <div key={chain.chain} className="p-4 bg-white rounded-lg">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div

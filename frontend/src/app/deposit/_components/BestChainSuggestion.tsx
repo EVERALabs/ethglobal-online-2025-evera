@@ -55,13 +55,13 @@ export const BestChainSuggestion: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Best Chain Recommendation */}
-      <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-2xl shadow-xl p-6 border border-primary/20">
+      <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
         <div className="flex items-center gap-3 mb-4">
           <span className="text-3xl">🎯</span>
           <h3 className="text-xl font-bold text-primary">Best Chain Suggestion</h3>
         </div>
         
-        <div className="bg-base-100/80 rounded-xl p-4 border border-primary/30">
+        <div className="bg-white rounded-xl p-4 border border-gray-200">
           <div className="flex items-center gap-3 mb-3">
             <span className="text-2xl">{bestChain.icon}</span>
             <div>
@@ -97,7 +97,7 @@ export const BestChainSuggestion: React.FC = () => {
       </div>
 
       {/* Chain Comparison */}
-      <div className="bg-base-100/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-base-300/50">
+      <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
         <h3 className="text-xl font-bold mb-4">Chain Comparison</h3>
         
         <div className="space-y-3">
@@ -135,7 +135,7 @@ export const BestChainSuggestion: React.FC = () => {
       </div>
 
       {/* Market Insights */}
-      <div className="bg-base-100/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-base-300/50">
+      <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
         <h3 className="text-xl font-bold mb-4">Market Insights</h3>
         
         <div className="space-y-4">

@@ -60,7 +60,7 @@ export const CurrentAllocationOverview: React.FC = () => {
   let cumulativePercentage = 0;
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl text-primary">
@@ -125,7 +125,7 @@ export const CurrentAllocationOverview: React.FC = () => {
             {chainData.map((chain, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 bg-base-200 rounded-lg hover:bg-base-300 transition-all duration-200 border border-transparent hover:border-primary/20"
+                className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-gray-100 transition-all duration-200 border border-transparent hover:border-primary/20"
               >
                 <div className="flex items-center gap-4">
                   <div
@@ -158,25 +158,25 @@ export const CurrentAllocationOverview: React.FC = () => {
         {/* Enhanced Stats */}
         <div className="divider"></div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
-          <div className="p-3 bg-base-200 rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <div className="text-xl font-bold text-info">
               {chainData.length}
             </div>
             <div className="text-sm opacity-70">Active Chains</div>
           </div>
-          <div className="p-3 bg-base-200 rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <div className="text-xl font-bold text-success">
               {chainData.reduce((sum, chain) => sum + chain.currentAllocation, 0).toFixed(1)}%
             </div>
             <div className="text-sm opacity-70">Total Allocation</div>
           </div>
-          <div className="p-3 bg-base-200 rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <div className="text-xl font-bold text-warning">
               {Math.max(...chainData.map(c => c.currentAllocation)).toFixed(1)}%
             </div>
             <div className="text-sm opacity-70">Max Single Chain</div>
           </div>
-          <div className="p-3 bg-base-200 rounded-lg">
+          <div className="p-3 bg-white rounded-lg">
             <div className="text-xl font-bold text-primary">
               {weightedAPY.toFixed(1)}%
             </div>
