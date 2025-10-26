@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ROLES } from "./const/roles";
-import LoginPage from "./app/login";
 import HomePage from "./app/home";
 import DashboardPage from "./app/dashboard";
 import ProfilePage from "./app/profile";
@@ -14,10 +13,6 @@ import VaultDetailPage from "./app/vault-detail";
 import AboutPage from "./app/about";
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
   {
     path: "/unauthorized",
     element: <UnauthorizedPage />,

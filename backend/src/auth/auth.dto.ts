@@ -36,33 +36,15 @@ export class RegisterDto {
 
 // New Wallet Authentication DTOs
 export class WalletAuthDto {
-  @ApiProperty({
-    description: 'Ethereum wallet address',
-    example: '0x742d35Cc6634C0532925a3b8D7389C2F5Cf5e5e5',
-  })
-  @IsNotEmpty()
-  @IsString()
-  @IsEthereumAddress()
-  walletAddress: string;
-
   @ApiProperty({ description: 'Signed message signature' })
   @IsNotEmpty()
   @IsString()
   signature: string;
 
-  @ApiProperty({ description: 'Original message that was signed' })
+  @ApiProperty({ description: 'Original SIWE message that was signed' })
   @IsNotEmpty()
   @IsString()
   message: string;
-
-  @ApiProperty({
-    description: 'User name (optional for registration)',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  @Length(2, 50)
-  name?: string;
 }
 
 export class GetNonceDto {

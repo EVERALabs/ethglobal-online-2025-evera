@@ -5,10 +5,9 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcryptjs';
 import { ethers } from 'ethers';
-import { nanoid } from 'nanoid';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { generateRandomAlphaNumeric } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
@@ -65,31 +64,63 @@ export class AuthService {
 
   // New wallet-based authentication methods
   async generateNonce(walletAddress: string): Promise<string> {
-    const nonce = nanoid(16);
+    try {
+      let nonce = generateRandomAlphaNumeric(10);
+      const normalizedAddress = walletAddress.toLowerCase();
 
-    // Check if user exists, if not create a temporary record with nonce
-    const existingUser = await this.prisma.user.findUnique({
-      where: { walletAddress: walletAddress.toLowerCase() },
-    });
+      // Check if user exists, if not create a temporary record with nonce
+      const existingUser = await this.prisma.user.findUnique({
+        where: { walletAddress: normalizedAddress },
+      });
 
-    if (existingUser) {
-      // Update existing user's nonce
-      await this.prisma.user.update({
-        where: { walletAddress: walletAddress.toLowerCase() },
-        data: { lastNonce: nonce },
-      });
-    } else {
-      // Create new user record with nonce (will be completed during wallet auth)
-      await this.prisma.user.create({
-        data: {
-          walletAddress: walletAddress.toLowerCase(),
-          lastNonce: nonce,
-          role: 'user',
-        },
-      });
+      if (existingUser) {
+        // Update existing user's nonce
+        await this.prisma.user.update({
+          where: { walletAddress: normalizedAddress },
+          data: { lastNonce: nonce.toString() },
+        });
+        console.log(`Updated nonce for existing user: ${normalizedAddress}`);
+      } else {
+        // Create new user record with nonce (will be completed during wallet auth)
+        try {
+          await this.prisma.user.create({
+            data: {
+              walletAddress: normalizedAddress,
+              lastNonce: nonce.toString(),
+              role: 'user',
+            },
+          });
+          console.log(`Created new user record for: ${normalizedAddress}`);
+        } catch (createError) {
+          // Handle potential race condition where user was created between findUnique and create
+          if (createError.code === 'P2002') {
+            // Prisma unique constraint error
+            console.log(
+              `User already exists (race condition), updating nonce for: ${normalizedAddress}`,
+            );
+            await this.prisma.user.update({
+              where: { walletAddress: normalizedAddress },
+              data: { lastNonce: nonce.toString() },
+            });
+          } else {
+            console.error('Error creating user record:', createError);
+            throw new BadRequestException(
+              'Failed to create user record for wallet authentication',
+            );
+          }
+        }
+      }
+
+      return nonce.toString();
+    } catch (error) {
+      console.error('Error generating nonce:', error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException(
+        'Failed to generate nonce for wallet authentication',
+      );
     }
-
-    return nonce;
   }
 
   async verifySignature(
@@ -106,12 +137,34 @@ export class AuthService {
     }
   }
 
-  async authenticateWallet(
-    walletAddress: string,
-    signature: string,
-    message: string,
-    name?: string,
-  ) {
+  extractWalletAddressFromSiweMessage(message: string): string {
+    // Extract wallet address from SIWE message
+    // SIWE format: "domain wants you to sign in with your Ethereum account:\n{address}\n\n..."
+    const addressMatch = message.match(/0x[a-fA-F0-9]{40}/);
+    if (!addressMatch) {
+      throw new BadRequestException(
+        'Invalid SIWE message format: no wallet address found',
+      );
+    }
+    return addressMatch[0];
+  }
+
+  extractNonceFromSiweMessage(message: string): string {
+    // Extract nonce from SIWE message
+    // Look for "Nonce: {nonce}" pattern
+    const nonceMatch = message.match(/Nonce:\s*([^\n\r]+)/);
+    if (!nonceMatch) {
+      throw new BadRequestException(
+        'Invalid SIWE message format: no nonce found',
+      );
+    }
+    return nonceMatch[1].trim();
+  }
+
+  async authenticateWallet(signature: string, message: string) {
+    // Extract wallet address from the SIWE message
+    const walletAddress = this.extractWalletAddressFromSiweMessage(message);
+
     // Verify the signature
     const isValidSignature = await this.verifySignature(
       walletAddress,
@@ -122,7 +175,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid signature');
     }
 
-    // Check if the message contains the expected nonce
+    // Extract nonce from message and verify it matches the user's stored nonce
+    const messageNonce = this.extractNonceFromSiweMessage(message);
+
+    // Check if user exists
     const user = await this.prisma.user.findUnique({
       where: { walletAddress: walletAddress.toLowerCase() },
     });
@@ -133,17 +189,16 @@ export class AuthService {
       );
     }
 
-    // Verify that the message contains the user's nonce
-    if (!message.includes(user.lastNonce)) {
-      throw new UnauthorizedException('Invalid nonce in message');
+    // Verify that the nonce in the message matches the stored nonce
+    if (messageNonce !== user.lastNonce) {
+      throw new UnauthorizedException('Invalid or expired nonce');
     }
 
-    // Update user's last login and name if provided
+    // Update user's last login
     const updatedUser = await this.prisma.user.update({
       where: { walletAddress: walletAddress.toLowerCase() },
       data: {
         lastLogin: new Date(),
-        ...(name && { name }),
       },
     });
 

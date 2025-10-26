@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { type Role } from "../const/roles";
 import { AUTH_CONFIG } from "../const/auth";
+import { setAuthState } from "./RainbowAuth";
 
 export interface User {
   id: string;
@@ -39,11 +40,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Load user from localStorage on app start
     const loadUserFromStorage = () => {
+      console.log("Loading user from storage");
       try {
         const storedUser = localStorage.getItem(AUTH_CONFIG.STORAGE_KEYS.USER);
         const storedToken = localStorage.getItem(
           AUTH_CONFIG.STORAGE_KEYS.TOKEN
         );
+
+        console.log("Stored user:", storedUser);
+        console.log("Stored token:", storedToken);
 
         if (storedUser && storedToken) {
           const userData = JSON.parse(storedUser);
@@ -84,6 +89,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Clear any other wallet-related storage
     localStorage.removeItem("evera_auth_provider");
+    setAuthState("unauthenticated");
 
     // Clear any wagmi/wallet connect storage
     const keysToRemove = [];

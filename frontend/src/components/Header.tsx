@@ -1,140 +1,181 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+// Assuming these contexts and hooks are available in the running environment
 import { useAuth } from "../context/AuthContext";
 import { useWeb3 } from "../hooks/useWeb3";
-import { formatAddress } from "../lib/utils";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-export const Header: React.FC = () => {
-  const { user, logout, isAuthenticated } = useAuth();
-  const { isConnected, disconnect } = useWeb3();
+// Mock NavLink data
+const navLinks = [
+  // { name: "Dashboard", path: "/dashboard" },
+  { name: "Deposit", path: "/deposit" },
+  { name: "Analytics", path: "/analytics" },
+  { name: "Rebalance", path: "/rebalance" },
+  { name: "Settings", path: "/settings" },
+  { name: "Docs", path: "/about" },
+];
+
+// --- Enhanced Header Component ---
+
+export const Header = () => {
+  // --- State and Hooks ---
+  const { logout, isAuthenticated } = useAuth(); // Assume these are active
+  const { isConnected, disconnect } = useWeb3(); // Assume these are active
   const navigate = useNavigate();
-  const [currentChain, setCurrentChain] = useState("Base");
-  const [isScrolled, setIsScrolled] = useState(false);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Replace currentChain state with mock network info for visual enhancement
+  const [currentNetwork, setCurrentNetwork] = useState({
+    name: "Base",
+    color: "text-blue-600",
+    bg: "bg-blue-50",
+  });
+
+  // --- Effects ---
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // --- Handlers ---
   const handleLogout = async () => {
     try {
-      console.log("Starting logout process...");
-
-      // First disconnect the wallet
       if (isConnected) {
-        console.log("Disconnecting wallet...");
-        await disconnect();
+        await disconnect(); // Wallet disconnect (RainbowKit adapter's signOut is often tied to this)
       }
-
-      // Then logout from auth context (this clears localStorage)
-      logout();
-
-      // Navigate to home page
-      navigate("/", { replace: true });
-
-      console.log("Logout completed successfully");
+      logout(); // App session logout
+      navigate("/");
     } catch (error) {
       console.error("Logout error:", error);
-      // Even if wallet disconnect fails, still logout from auth
       logout();
-      navigate("/", { replace: true });
+      navigate("/");
     }
   };
 
-  const switchChain = () => {
-    // Toggle between Base and Arbitrum for demo
-    setCurrentChain(currentChain === "Base" ? "Arbitrum" : "Base");
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
-  const navLinks = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Deposit", path: "/deposit" },
-    { name: "Analytics", path: "/analytics" },
-    { name: "Rebalance", path: "/rebalance" },
-    { name: "Settings", path: "/settings" },
-    { name: "Docs", path: "/about" },
-  ];
+  const switchNetwork = () => {
+    // Mock chain switch action for visual demonstration
+    setCurrentNetwork((prev) =>
+      prev.name === "Base"
+        ? { name: "Arbitrum", color: "text-sky-600", bg: "bg-sky-50" }
+        : { name: "Base", color: "text-blue-600", bg: "bg-blue-50" }
+    );
+  };
 
+  // --- Render ---
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/98 backdrop-blur-md shadow-sm border-b border-gray-200"
-          : "bg-white/95 backdrop-blur-md border-b border-gray-100"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo - pure-L minimal */}
-          <Link
-            to="/"
-            className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200"
-          >
-            <img
-              src="/purel-logo.png"
-              alt="pure-L logo"
-              className="h-8 w-auto"
-            />
-          </Link>
-
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className="px-4 py-2 font-medium text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-200"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right side controls */}
-          <div className="flex items-center space-x-3">
-            {/* Chain Indicator */}
-            <button
-              onClick={switchChain}
-              className="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-lg transition-all duration-200 bg-blue-50 hover:bg-blue-100 border border-blue-200"
+    <>
+      {/* Fixed Header */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100"
+            : "bg-white/90 backdrop-blur-md border-b border-gray-50"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* 1. Logo and Title */}
+            <Link
+              to="/"
+              className="flex items-center space-x-2 text-xl font-extrabold text-gray-900 tracking-tight"
             >
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span className="text-sm font-medium text-blue-900">
-                {currentChain}
+              <svg
+                className="w-6 h-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3 .895-3 2-1.343 2-3 2m0-8h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>
+                Pure<span className="text-blue-600">-L</span> Finance
               </span>
-            </button>
+            </Link>
 
-            {/* Wallet Button */}
-            {isAuthenticated && user ? (
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-900 text-white">
-                  <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center">
+            {/* 2. Desktop Navigation Links (Centered) */}
+            <nav className="hidden md:flex items-center space-x-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  // Adjusted styling for a cleaner, more professional look
+                  className="px-3 py-2 font-medium text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+
+            {/* 3. Right side controls (Web3 Block) */}
+            <div className="flex items-center space-x-3">
+              {/* Connect Button or Auth/User Menu */}
+              {isAuthenticated ? (
+                // Authenticated User Menu Block
+                <div className="flex items-center space-x-2 p-1 pl-3 bg-gray-100 rounded-full border border-gray-200">
+                  {/* The ConnectButton (which now typically shows Address/Disconnect) */}
+                  <ConnectButton />
+
+                  {/* // button to navigate to dashboard */}
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="p-2 ml-1 text-gray-500 hover:text-blue-500 transition-colors duration-200 hidden sm:block"
+                    title="Dashboard"
+                  >
+                    Dashboard
+                  </button>
+
+                  {/* Simple Logout Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="p-2 ml-1 text-gray-500 hover:text-red-500 transition-colors duration-200 hidden sm:block"
+                    title="Sign Out"
+                  >
                     <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                       />
                     </svg>
-                  </div>
-                  <span className="text-sm font-medium">
-                    {formatAddress(user.address || "")}
-                  </span>
+                  </button>
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 text-gray-600 hover:text-red-600 hover:bg-red-50 border border-gray-200 hover:border-red-200"
-                  title="Logout & Disconnect Wallet"
-                >
+              ) : (
+                // Unauthenticated: Show only ConnectButton
+                <ConnectButton />
+              )}
+
+              {/* Mobile menu button */}
+              <button
+                onClick={toggleMobileMenu}
+                className="md:hidden p-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-all duration-200"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+              >
+                {isMobileMenuOpen ? (
                   <svg
-                    className="w-4 h-4"
+                    className="w-6 h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -143,42 +184,61 @@ export const Header: React.FC = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
-                  <span className="text-sm font-medium hidden sm:block">
-                    Logout
-                  </span>
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
-              >
-                Sign In
-              </Link>
-            )}
-
-            {/* Mobile menu button */}
-            <button className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
+                ) : (
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
+      </header>
+
+      {/* Mobile Menu (Sliding Panel Mock) */}
+      <div
+        id="mobile-menu"
+        className={`fixed top-16 right-0 w-full max-w-xs h-full bg-white shadow-xl transform transition-transform duration-300 md:hidden z-40 ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="p-4 space-y-2 border-t border-gray-100">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={toggleMobileMenu} // Close menu on click
+              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg"
+            >
+              {link.name}
+            </Link>
+          ))}
+
+          <hr className="my-2" />
+
+          {/* Mobile Logout/Auth Info */}
+          <button
+            onClick={switchNetwork}
+            className={`flex items-center w-full justify-start space-x-2 px-3 py-2 rounded-lg font-semibold text-sm transition-all duration-200 ${currentNetwork.bg} ${currentNetwork.color} border border-gray-100`}
+          >
+            <span className="w-2 h-2 rounded-full bg-current"></span>
+            <span>Current Network: {currentNetwork.name}</span>
+          </button>
+        </div>
       </div>
-    </header>
+    </>
   );
 };

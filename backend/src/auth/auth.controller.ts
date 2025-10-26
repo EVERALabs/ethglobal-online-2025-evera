@@ -13,13 +13,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from '../decorators/public.decorator';
-import {
-  LoginDto,
-  RegisterDto,
-  WalletAuthDto,
-  GetNonceDto,
-  UpdateEmailDto,
-} from './auth.dto';
+import { WalletAuthDto, GetNonceDto, UpdateEmailDto } from './auth.dto';
 import {
   ApiTags,
   ApiOperation,
@@ -41,20 +35,30 @@ export class AuthController {
     status: 200,
     description: 'Returns nonce and SIWE message for signing',
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid wallet address or failed to generate nonce',
+  })
   async getNonce(@Query() getNonceDto: GetNonceDto) {
-    const nonce = await this.authService.generateNonce(
-      getNonceDto.walletAddress,
-    );
-    const message = this.authService.generateSiweMessage(
-      getNonceDto.walletAddress,
-      nonce,
-    );
+    try {
+      const nonce = await this.authService.generateNonce(
+        getNonceDto.walletAddress,
+      );
+      const message = this.authService.generateSiweMessage(
+        getNonceDto.walletAddress,
+        nonce,
+      );
 
-    return {
-      nonce,
-      message,
-      walletAddress: getNonceDto.walletAddress,
-    };
+      return {
+        nonce,
+        message,
+        walletAddress: getNonceDto.walletAddress,
+        success: true,
+      };
+    } catch (error) {
+      console.error('Error in getNonce endpoint:', error);
+      throw error; // Re-throw to let NestJS handle the HTTP response
+    }
   }
 
   @Public()
@@ -68,10 +72,8 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid signature or nonce' })
   async walletAuth(@Body() walletAuthDto: WalletAuthDto) {
     return this.authService.authenticateWallet(
-      walletAuthDto.walletAddress,
       walletAuthDto.signature,
       walletAuthDto.message,
-      walletAuthDto.name,
     );
   }
 
