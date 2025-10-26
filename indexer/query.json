@@ -1,0 +1,3 @@
+{
+  "query": "query AllEvent { PositionManagerRouter_NFTMinted { id owner tokenId } PositionManagerRouter_MintedPosition { fee id owner pool token0 token1 tokenId } PositionManagerRouter_Initialized { id version } PositionManagerRouter_PositionCreated { amount0 amount1 owner id tokenId } }"
+}
