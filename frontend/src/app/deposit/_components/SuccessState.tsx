@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 interface SuccessStateProps {
   onViewDashboard: () => void;
+  transactionHash?: string;
+  gasUsed?: string;
 }
 
-export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) => {
+export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard, transactionHash, gasUsed }) => {
   const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
@@ -61,9 +63,18 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Transaction Hash:</span>
-                <span className="font-mono text-sm">
-                  0x1234...5678
-                </span>
+                {transactionHash ? (
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-sm text-primary hover:text-primary/80 underline"
+                  >
+                    {`${transactionHash.slice(0, 6)}...${transactionHash.slice(-4)}`}
+                  </a>
+                ) : (
+                  <span className="font-mono text-sm opacity-50">Loading...</span>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Status:</span>
@@ -71,7 +82,9 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
               </div>
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Gas Used:</span>
-                <span className="font-semibold">0.023 ETH</span>
+                <span className="font-semibold">
+                  {gasUsed ? `${gasUsed} ETH` : 'Loading...'}
+                </span>
               </div>
             </div>
           </div>

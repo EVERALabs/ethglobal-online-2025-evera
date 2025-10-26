@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useWeb3 } from '../../hooks/useWeb3';
+import { usePositionContract } from '../../hooks/usePosition';
 import { DepositForm } from './_components/DepositForm';
 import { BestChainSuggestion } from './_components/BestChainSuggestion';
 import { SimulationPreview } from './_components/SimulationPreview';
@@ -21,6 +22,7 @@ interface DepositData {
 const DepositPage: React.FC = () => {
   const { user } = useAuth();
   const { isConnected } = useWeb3();
+  const { createPosition, hash, isConfirmed, receipt, isPending, isConfirming } = usePositionContract();
   const [depositData, setDepositData] = useState<DepositData | null>(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -31,20 +33,27 @@ const DepositPage: React.FC = () => {
     setShowConfirmModal(true);
   };
 
-  const handleConfirmDeposit = async () => {
-    setIsProcessing(true);
-    setShowConfirmModal(false);
-    
-    // Simulate transaction processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setIsProcessing(false);
-    setShowSuccess(true);
-  };
+
+  // Update processing state based on transaction status
+  useEffect(() => {
+    if (isPending || isConfirming) {
+      setIsProcessing(true);
+    } else if (isConfirmed || (!isPending && !isConfirming && !hash)) {
+      setIsProcessing(false);
+    }
+  }, [isPending, isConfirming, isConfirmed, hash]);
 
   const handleViewDashboard = () => {
     window.location.href = '/dashboard';
   };
+
+  // Show success state when transaction is confirmed
+  useEffect(() => {
+    if (isConfirmed && hash && !showSuccess) {
+      setShowConfirmModal(false);
+      setShowSuccess(true);
+    }
+  }, [isConfirmed, hash, showSuccess]);
 
   if (!user) {
     return (
@@ -69,8 +78,16 @@ const DepositPage: React.FC = () => {
   }
 
   if (showSuccess) {
-    return <SuccessState onViewDashboard={handleViewDashboard} />;
+    const gasUsed = receipt?.gasUsed ? (Number(receipt.gasUsed) / 1e18).toFixed(6) : undefined;
+    return (
+      <SuccessState
+        onViewDashboard={handleViewDashboard}
+        transactionHash={hash}
+        gasUsed={gasUsed}
+      />
+    );
   }
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -94,9 +111,9 @@ const DepositPage: React.FC = () => {
               {/* Left Column - Deposit Form */}
               <div className="lg:col-span-2 space-y-6">
                 <DepositForm onSubmit={handleDepositSubmit} />
-                
+
                 {depositData && (
-                  <SimulationPreview 
+                  <SimulationPreview
                     data={depositData}
                     onConfirm={() => setShowConfirmModal(true)}
                   />
@@ -116,8 +133,10 @@ const DepositPage: React.FC = () => {
           <ConfirmModal
             data={depositData}
             isProcessing={isProcessing}
-            onConfirm={handleConfirmDeposit}
             onCancel={() => setShowConfirmModal(false)}
+            createPosition={createPosition}
+            transactionHash={hash}
+            isConfirmed={isConfirmed}
           />
         )}
       </div>
