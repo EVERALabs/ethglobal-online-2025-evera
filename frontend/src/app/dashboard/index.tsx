@@ -1,7 +1,6 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useWeb3 } from "../../hooks/useWeb3";
-import { ROLES } from "../../const/roles";
 import { formatAddress } from "../../lib/utils";
 import { StatsCards } from "./_components/StatsCards";
 import { QuickActions } from "./_components/QuickActions";
@@ -107,51 +106,6 @@ const DashboardPage: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-              {/* User Info Card */}
-              <div className="card bg-base-100 shadow-xl border border-base-300">
-                <div className="card-body p-6">
-                  <h3 className="card-title text-xl font-primary mb-4">
-                    Account Info
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">
-                        Name:
-                      </span>
-                      <span className="font-secondary font-semibold">
-                        {user.name || "Not set"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">
-                        Email:
-                      </span>
-                      <span className="font-secondary font-semibold">
-                        {user.email || "Not set"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">
-                        Address:
-                      </span>
-                      <span className="font-secondary font-mono text-sm font-semibold">
-                        {user.address
-                          ? formatAddress(user.address)
-                          : "Not connected"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="opacity-70 font-secondary font-medium">
-                        Role:
-                      </span>
-                      <span className="badge badge-primary badge-lg">
-                        {user.role}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Portfolio Summary */}
               <div className="card bg-gradient-to-br from-primary/10 to-secondary/10 shadow-xl border border-primary/20">
                 <div className="card-body p-6">

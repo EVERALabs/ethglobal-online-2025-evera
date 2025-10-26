@@ -11,6 +11,7 @@ import AnalyticsPage from "./app/analytics";
 import SettingsPage from "./app/settings";
 import VaultDetailPage from "./app/vault-detail";
 import AboutPage from "./app/about";
+import AdminPage from "./app/admin";
 
 const router = createBrowserRouter([
   {
@@ -70,13 +71,7 @@ const router = createBrowserRouter([
         path: "admin",
         element: (
           <ProtectedRoute requiredRoles={[ROLES.ADMIN]}>
-            <div className="text-center py-20">
-              <h1 className="text-4xl font-bold mb-4">Admin Panel</h1>
-              <p className="text-lg opacity-70">Admin-only content goes here</p>
-              <div className="badge badge-error badge-lg mt-4">
-                Admin Access Required
-              </div>
-            </div>
+            <AdminPage />
           </ProtectedRoute>
         ),
       },
