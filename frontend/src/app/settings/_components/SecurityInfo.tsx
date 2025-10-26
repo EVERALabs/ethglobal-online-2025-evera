@@ -158,7 +158,7 @@ export const SecurityInfo: React.FC = () => {
   };
 
   return (
-    <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <div className="p-2 bg-success/10 rounded-lg">
@@ -167,7 +167,7 @@ export const SecurityInfo: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-base-content">Security Information</h2>
+            <h2 className="text-2xl font-bold text-black">Security Information</h2>
             <p className="text-sm opacity-70">Contract addresses, audits, and security links</p>
           </div>
         </div>
@@ -191,12 +191,12 @@ export const SecurityInfo: React.FC = () => {
           {CONTRACTS_DATA.map((contract, index) => (
             <div
               key={index}
-              className="p-4 rounded-lg border border-base-300 bg-base-50 hover:bg-base-100 transition-colors duration-200"
+              className="p-4 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 transition-colors duration-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h4 className="font-semibold text-base-content">{contract.name}</h4>
+                    <h4 className="font-semibold text-black">{contract.name}</h4>
                     {getContractTypeBadge(contract.type)}
                     <span className="badge badge-outline badge-sm">{contract.version}</span>
                     {contract.verified && (
@@ -210,7 +210,7 @@ export const SecurityInfo: React.FC = () => {
                   </div>
                   <p className="text-sm opacity-70 mb-2">{contract.description}</p>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-mono bg-base-200 px-2 py-1 rounded">
+                    <span className="text-sm font-mono bg-white px-2 py-1 rounded">
                       {formatAddress(contract.address)}
                     </span>
                     <button
@@ -251,12 +251,12 @@ export const SecurityInfo: React.FC = () => {
           {AUDITS_DATA.map((audit, index) => (
             <div
               key={index}
-              className="p-4 rounded-lg border border-base-300 bg-base-50 hover:bg-base-100 transition-colors duration-200"
+              className="p-4 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 transition-colors duration-200"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h4 className="font-semibold text-base-content">{audit.firm}</h4>
+                    <h4 className="font-semibold text-black">{audit.firm}</h4>
                     {getAuditStatusBadge(audit.status)}
                     <span className="text-sm opacity-70">{audit.date}</span>
                   </div>
@@ -291,7 +291,7 @@ export const SecurityInfo: React.FC = () => {
       </div>
 
       {/* Security Links */}
-      <div className="p-4 bg-base-200 rounded-lg">
+      <div className="p-4 bg-white rounded-lg">
         <h3 className="font-semibold mb-3 text-sm opacity-70">Security Resources</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <a

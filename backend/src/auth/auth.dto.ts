@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Length,
+  IsOptional,
+  IsEthereumAddress,
+} from 'class-validator';
 
+// Legacy DTOs (keeping for backward compatibility if needed)
 export class LoginDto {
   @ApiProperty({ description: 'Email address' })
   email: string;
@@ -24,4 +32,35 @@ export class RegisterDto {
   @IsString()
   @Length(3, 20)
   name: string;
+}
+
+// New Wallet Authentication DTOs
+export class WalletAuthDto {
+  @ApiProperty({ description: 'Signed message signature' })
+  @IsNotEmpty()
+  @IsString()
+  signature: string;
+
+  @ApiProperty({ description: 'Original SIWE message that was signed' })
+  @IsNotEmpty()
+  @IsString()
+  message: string;
+}
+
+export class GetNonceDto {
+  @ApiProperty({
+    description: 'Ethereum wallet address',
+    example: '0x742d35Cc6634C0532925a3b8D7389C2F5Cf5e5e5',
+  })
+  @IsNotEmpty()
+  @IsString()
+  @IsEthereumAddress()
+  walletAddress: string;
+}
+
+export class UpdateEmailDto {
+  @ApiProperty({ description: 'New email address' })
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
 }

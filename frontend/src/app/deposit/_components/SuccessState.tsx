@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 interface SuccessStateProps {
   onViewDashboard: () => void;
+  transactionHash?: string;
+  gasUsed?: string;
 }
 
-export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) => {
+export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard, transactionHash, gasUsed }) => {
   const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
   }, []);
 
   return (
-    <div className="min-h-screen bg-base-200/30 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="relative">
         {/* Confetti Animation */}
         {showConfetti && (
@@ -42,7 +44,7 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
         )}
 
         {/* Success Card */}
-        <div className="bg-base-100/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border border-primary/20">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center border border-gray-200">
           {/* Success Icon */}
           <div className="mb-6">
             <div className="w-20 h-20 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -57,13 +59,22 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
           </div>
 
           {/* Transaction Details */}
-          <div className="bg-base-200/50 rounded-xl p-4 mb-6">
+          <div className="bg-white rounded-xl p-4 mb-6">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Transaction Hash:</span>
-                <span className="font-mono text-sm">
-                  0x1234...5678
-                </span>
+                {transactionHash ? (
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-sm text-primary hover:text-primary/80 underline"
+                  >
+                    {`${transactionHash.slice(0, 6)}...${transactionHash.slice(-4)}`}
+                  </a>
+                ) : (
+                  <span className="font-mono text-sm opacity-50">Loading...</span>
+                )}
               </div>
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Status:</span>
@@ -71,7 +82,9 @@ export const SuccessState: React.FC<SuccessStateProps> = ({ onViewDashboard }) =
               </div>
               <div className="flex justify-between items-center">
                 <span className="opacity-70">Gas Used:</span>
-                <span className="font-semibold">0.023 ETH</span>
+                <span className="font-semibold">
+                  {gasUsed ? `${gasUsed} ETH` : 'Loading...'}
+                </span>
               </div>
             </div>
           </div>

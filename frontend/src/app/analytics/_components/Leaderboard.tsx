@@ -173,7 +173,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ timeframe }) => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
       {/* Top Performing Chains */}
-      <div className="card bg-base-100 shadow-xl border border-base-300">
+      <div className="card bg-white shadow-xl border border-gray-200">
         <div className="card-body p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -189,10 +189,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ timeframe }) => {
             {chainData.map((chain, index) => (
               <div
                 key={chain.name}
-                className="flex items-center justify-between p-4 bg-base-200/50 rounded-lg hover:bg-base-200/70 transition-colors"
+                className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 bg-base-300 rounded-full text-sm font-bold">
+                  <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full text-sm font-bold">
                     {index + 1}
                   </div>
                   <div className="flex items-center gap-3">
@@ -231,7 +231,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ timeframe }) => {
       </div>
 
       {/* Most Active Pools */}
-      <div className="card bg-base-100 shadow-xl border border-base-300">
+      <div className="card bg-white shadow-xl border border-gray-200">
         <div className="card-body p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -247,10 +247,10 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ timeframe }) => {
             {poolData.map((pool, index) => (
               <div
                 key={pool.name}
-                className="flex items-center justify-between p-4 bg-base-200/50 rounded-lg hover:bg-base-200/70 transition-colors"
+                className="flex items-center justify-between p-4 bg-white rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 bg-base-300 rounded-full text-sm font-bold">
+                  <div className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full text-sm font-bold">
                     {index + 1}
                   </div>
                   <div>

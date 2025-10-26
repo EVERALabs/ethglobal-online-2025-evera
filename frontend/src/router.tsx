@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ROLES } from "./const/roles";
-import LoginPage from "./app/login";
 import HomePage from "./app/home";
 import DashboardPage from "./app/dashboard";
 import ProfilePage from "./app/profile";
@@ -12,12 +11,9 @@ import AnalyticsPage from "./app/analytics";
 import SettingsPage from "./app/settings";
 import VaultDetailPage from "./app/vault-detail";
 import AboutPage from "./app/about";
+import AdminPage from "./app/admin";
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
   {
     path: "/unauthorized",
     element: <UnauthorizedPage />,
@@ -75,13 +71,7 @@ const router = createBrowserRouter([
         path: "admin",
         element: (
           <ProtectedRoute requiredRoles={[ROLES.ADMIN]}>
-            <div className="text-center py-20">
-              <h1 className="text-4xl font-bold mb-4">Admin Panel</h1>
-              <p className="text-lg opacity-70">Admin-only content goes here</p>
-              <div className="badge badge-error badge-lg mt-4">
-                Admin Access Required
-              </div>
-            </div>
+            <AdminPage />
           </ProtectedRoute>
         ),
       },

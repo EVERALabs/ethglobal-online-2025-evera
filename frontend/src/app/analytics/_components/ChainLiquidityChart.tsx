@@ -84,7 +84,7 @@ export const ChainLiquidityChart: React.FC<ChainLiquidityChartProps> = ({
   ));
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <div>

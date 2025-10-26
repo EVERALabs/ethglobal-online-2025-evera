@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ConfirmModalProps {
   data: {
@@ -10,8 +10,10 @@ interface ConfirmModalProps {
     bridgePath: string[];
   };
   isProcessing: boolean;
-  onConfirm: () => void;
   onCancel: () => void;
+  createPosition: (amount: string) => Promise<void>;
+  transactionHash?: string;
+  isConfirmed?: boolean;
 }
 
 const CHAIN_INFO = {
@@ -24,11 +26,17 @@ const CHAIN_INFO = {
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   data,
   isProcessing,
-  onConfirm,
   onCancel,
+  createPosition,
+  transactionHash,
+  isConfirmed,
 }) => {
+  const [isLocalProcessing, setIsLocalProcessing] = useState(false);
   const totalAmount = parseFloat(data.amount);
   const isAutoAllocation = data.chain === 'auto';
+
+  const isActuallyProcessing = isProcessing || isLocalProcessing;
+  const showTransactionDetails = transactionHash && !isConfirmed;
 
   const getChainIcon = (chainId: string) => {
     return CHAIN_INFO[chainId as keyof typeof CHAIN_INFO]?.icon || '🔗';
@@ -44,7 +52,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-base-100 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center gap-3 mb-6">
@@ -75,7 +83,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <h3 className="font-bold text-lg mb-3">Allocation Breakdown</h3>
               <div className="space-y-2">
                 {Object.entries(data.projectedAllocation).map(([chainId, percentage]) => (
-                  <div key={chainId} className="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                  <div key={chainId} className="flex items-center justify-between p-3 bg-white rounded-lg">
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{getChainIcon(chainId)}</span>
                       <span className="font-semibold">{getChainName(chainId)}</span>
@@ -119,7 +127,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {isAutoAllocation && (
               <div>
                 <h3 className="font-bold text-lg mb-3">Bridge Path</h3>
-                <div className="flex items-center gap-2 p-3 bg-base-200/50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-white rounded-lg">
                   {data.bridgePath.map((chainId, index) => (
                     <React.Fragment key={chainId}>
                       <div className="flex items-center gap-2">
@@ -160,38 +168,84 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               </div>
             </div>
 
-            {/* Warning */}
-            <div className="bg-warning/10 rounded-xl p-4 border border-warning/20">
-              <div className="flex items-start gap-3">
-                <span className="text-warning text-xl">⚠️</span>
-                <div>
-                  <div className="font-semibold text-warning mb-1">Important Notice</div>
-                  <div className="text-sm opacity-70">
-                    This transaction cannot be undone. Your funds will be automatically allocated 
-                    across chains and may take a few minutes to complete. You can withdraw at any time.
+            {/* Transaction Status (when processing) */}
+            {showTransactionDetails && (
+              <div className="bg-primary/10 rounded-xl p-4 border border-primary/20">
+                <div className="flex items-start gap-3">
+                  <span className="text-primary text-xl">⏳</span>
+                  <div>
+                    <div className="font-semibold text-primary mb-1">Transaction Submitted</div>
+                    <div className="text-sm opacity-70 mb-3">
+                      Your transaction has been submitted and is being processed. Please wait for confirmation.
+                    </div>
+                    <div className="bg-white rounded-lg p-3">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm opacity-70">Transaction Hash:</span>
+                        <a
+                          href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-sm text-primary hover:text-primary/80 underline"
+                        >
+                          {`${transactionHash.slice(0, 6)}...${transactionHash.slice(-4)}`}
+                        </a>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm opacity-70">Status:</span>
+                        <span className="badge badge-warning">Confirming</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Warning (only show when not processing) */}
+            {!showTransactionDetails && (
+              <div className="bg-warning/10 rounded-xl p-4 border border-warning/20">
+                <div className="flex items-start gap-3">
+                  <span className="text-warning text-xl">⚠️</span>
+                  <div>
+                    <div className="font-semibold text-warning mb-1">Important Notice</div>
+                    <div className="text-sm opacity-70">
+                      This transaction cannot be undone. Your funds will be automatically allocated
+                      across chains and may take a few minutes to complete. You can withdraw at any time.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex gap-3">
               <button
                 onClick={onCancel}
-                disabled={isProcessing}
+                disabled={isActuallyProcessing}
                 className="btn btn-outline flex-1"
               >
                 Cancel
               </button>
               <button
-                onClick={onConfirm}
-                disabled={isProcessing}
+                onClick={async () => {
+                  if (isActuallyProcessing) return; // Prevent multiple clicks
+
+                  setIsLocalProcessing(true);
+                  try {
+                    await createPosition(data.amount);
+                    // Don't call onConfirm() here - let parent handle the flow
+                  } catch (error) {
+                    console.error('Deposit failed:', error);
+                    alert('Deposit failed. Please try again.');
+                    setIsLocalProcessing(false); // Reset on error
+                  }
+                }}
+                disabled={isActuallyProcessing}
                 className="btn btn-primary flex-1"
               >
-                {isProcessing ? (
+                {isActuallyProcessing ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
-                    Processing...
+                    {isLocalProcessing ? 'Signing Transaction...' : 'Processing...'}
                   </>
                 ) : (
                   'Confirm Deposit'

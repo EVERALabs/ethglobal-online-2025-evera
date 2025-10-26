@@ -9,14 +9,14 @@ import { DocumentationLinks } from "./_components/DocumentationLinks";
 const AboutPage: React.FC = () => {
   return (
     <Layout>
-      <div className="min-h-screen bg-base-200/30">
-        <div className="container mx-auto px-4 py-6 max-w-7xl">
+      <div className="min-h-screen bg-white">
+        <div className="container mx-auto px-4 py-30 max-w-7xl">
           <div className="space-y-8">
             {/* Page Header */}
-            <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
               <div className="text-center">
                 <div className="mb-6">
-                  <img src="/purel-logo.png" alt="Pure-L Logo" className="h-16 mx-auto mb-4" />
+                  <img src="/purel-logo.png" alt="Pure-L Logo" className="h-30 mx-auto mb-4" />
                 </div>
                 <h1 className="text-4xl font-primary font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
                   About Pure-L

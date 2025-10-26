@@ -8,7 +8,7 @@ const UnauthorizedPage: React.FC = () => {
 
   const handleLogout = async () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   return (

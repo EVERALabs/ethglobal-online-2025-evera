@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { type Role } from "../const/roles";
 import { AUTH_CONFIG } from "../const/auth";
+import { setAuthState } from "./RainbowAuth";
 
 export interface User {
   id: string;
@@ -39,11 +40,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     // Load user from localStorage on app start
     const loadUserFromStorage = () => {
+      console.log("Loading user from storage");
       try {
         const storedUser = localStorage.getItem(AUTH_CONFIG.STORAGE_KEYS.USER);
         const storedToken = localStorage.getItem(
           AUTH_CONFIG.STORAGE_KEYS.TOKEN
         );
+
+        console.log("Stored user:", storedUser);
+        console.log("Stored token:", storedToken);
 
         if (storedUser && storedToken) {
           const userData = JSON.parse(storedUser);
@@ -75,10 +80,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+
+    // Clear all auth-related localStorage items
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.USER);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.TOKEN);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.ROLE);
     localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.AUTH_PROVIDER);
+
+    // Clear any other wallet-related storage
+    localStorage.removeItem("evera_auth_provider");
+    setAuthState("unauthenticated");
+
+    // Clear any wagmi/wallet connect storage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key &&
+        (key.startsWith("wagmi") ||
+          key.startsWith("walletconnect") ||
+          key.startsWith("wc@2"))
+      ) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+
+    console.log("User logged out and all storage cleared");
   };
 
   const updateUser = (userData: Partial<User>) => {
@@ -104,6 +132,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {

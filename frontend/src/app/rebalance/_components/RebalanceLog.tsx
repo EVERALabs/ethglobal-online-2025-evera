@@ -145,7 +145,7 @@ export const RebalanceLog: React.FC = () => {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl text-primary">
@@ -153,6 +153,7 @@ export const RebalanceLog: React.FC = () => {
           </h3>
           <div className="flex gap-2">
             <select
+              style={{ backgroundColor: 'white', color: 'black' }}
               className="select select-bordered select-sm"
               value={filter}
               onChange={(e) => setFilter(e.target.value as any)}
@@ -167,17 +168,17 @@ export const RebalanceLog: React.FC = () => {
 
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="stat bg-base-200 rounded-lg p-4">
+          <div className="stat bg-white rounded-lg p-4">
             <div className="stat-title text-sm">Total Rebalances</div>
             <div className="stat-value text-2xl text-primary">{rebalanceHistory.length}</div>
           </div>
-          <div className="stat bg-base-200 rounded-lg p-4">
+          <div className="stat bg-white rounded-lg p-4">
             <div className="stat-title text-sm">Success Rate</div>
             <div className="stat-value text-2xl text-success">
               {Math.round((rebalanceHistory.filter(e => e.result === 'success').length / rebalanceHistory.length) * 100)}%
             </div>
           </div>
-          <div className="stat bg-base-200 rounded-lg p-4">
+          <div className="stat bg-white rounded-lg p-4">
             <div className="stat-title text-sm">Avg Gas Used</div>
             <div className="stat-value text-2xl text-info">
               {rebalanceHistory
@@ -187,7 +188,7 @@ export const RebalanceLog: React.FC = () => {
               } ETH
             </div>
           </div>
-          <div className="stat bg-base-200 rounded-lg p-4">
+          <div className="stat bg-white rounded-lg p-4">
             <div className="stat-title text-sm">Last Rebalance</div>
             <div className="stat-value text-2xl text-warning">
               {formatTimeAgo(rebalanceHistory[0].timestamp)}
@@ -200,7 +201,7 @@ export const RebalanceLog: React.FC = () => {
           {filteredHistory.map((entry) => (
             <div
               key={entry.id}
-              className={`card bg-base-200 border-2 transition-all duration-200 cursor-pointer ${
+              className={`card bg-white border-2 transition-all duration-200 cursor-pointer ${
                 selectedEntry === entry.id 
                   ? 'border-primary shadow-lg' 
                   : 'border-transparent hover:border-primary/30'
@@ -239,13 +240,13 @@ export const RebalanceLog: React.FC = () => {
 
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className="text-sm font-bold text-primary">
                       {entry.moves.length}
                     </div>
                     <div className="text-xs opacity-70">Moves</div>
                   </div>
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className={`text-sm font-bold ${
                       entry.impact.apyChange >= 0 ? 'text-success' : 'text-error'
                     }`}>
@@ -253,13 +254,13 @@ export const RebalanceLog: React.FC = () => {
                     </div>
                     <div className="text-xs opacity-70">APY Change</div>
                   </div>
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className={`text-sm font-bold ${getRiskColor(entry.impact.riskChange)}`}>
                       {entry.impact.riskChange.toUpperCase()}
                     </div>
                     <div className="text-xs opacity-70">Risk</div>
                   </div>
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className="text-sm font-bold text-info">
                       {entry.impact.volumeChange}%
                     </div>
@@ -268,13 +269,13 @@ export const RebalanceLog: React.FC = () => {
                 </div>
 
                 {selectedEntry === entry.id && (
-                  <div className="space-y-4 pt-4 border-t border-base-300">
+                  <div className="space-y-4 pt-4 border-t border-gray-200">
                     {/* Detailed Moves */}
                     <div>
                       <h5 className="font-semibold mb-2 text-primary">Moves Executed:</h5>
                       <div className="space-y-2">
                         {entry.moves.map((move, moveIndex) => (
-                          <div key={moveIndex} className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
+                          <div key={moveIndex} className="flex items-center justify-between p-3 bg-white rounded-lg">
                             <div className="flex items-center gap-3">
                               <div className="badge badge-outline">
                                 {move.from} → {move.to}
@@ -295,13 +296,13 @@ export const RebalanceLog: React.FC = () => {
                     <div>
                       <h5 className="font-semibold mb-2 text-info">Transaction Details:</h5>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="p-3 bg-base-100 rounded-lg">
+                        <div className="p-3 bg-white rounded-lg">
                           <div className="text-sm opacity-70">Transaction Hash</div>
                           <div className="font-mono text-sm break-all">
                             {entry.txHash}
                           </div>
                         </div>
-                        <div className="p-3 bg-base-100 rounded-lg">
+                        <div className="p-3 bg-white rounded-lg">
                           <div className="text-sm opacity-70">Gas Used</div>
                           <div className="font-semibold">{entry.gasUsed}</div>
                         </div>
@@ -312,7 +313,7 @@ export const RebalanceLog: React.FC = () => {
                     {entry.notes && (
                       <div>
                         <h5 className="font-semibold mb-2 text-warning">Notes:</h5>
-                        <div className="p-3 bg-base-100 rounded-lg">
+                        <div className="p-3 bg-white rounded-lg">
                           <div className="text-sm">{entry.notes}</div>
                         </div>
                       </div>
