@@ -1,0 +1,29 @@
+type PositionManagerRouter_Initialized {
+  id: ID!
+  version: BigInt!
+}
+
+type PositionManagerRouter_MintedPosition {
+  id: ID!
+  tokenId: BigInt!
+  owner: String!
+  token0: String!
+  token1: String!
+  fee: BigInt!
+  pool: String!
+}
+
+type PositionManagerRouter_NFTMinted {
+  id: ID!
+  owner: String!
+  tokenId: BigInt!
+}
+
+type PositionManagerRouter_PositionCreated {
+  id: ID!
+  owner: String!
+  tokenId: BigInt!
+  amount0: BigInt!
+  amount1: BigInt!
+}
+

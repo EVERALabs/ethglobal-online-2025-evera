@@ -1,24 +1,42 @@
-import React from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useWeb3 } from '../../hooks/useWeb3';
-import { ROLES } from '../../const/roles';
-import { formatAddress } from '../../lib/utils';
-import { StatsCards } from './_components/StatsCards';
-import { QuickActions } from './_components/QuickActions';
-import { PortfolioChart } from './_components/PortfolioChart';
-import { ChainAllocationTable } from './_components/ChainAllocationTable';
-import { RebalanceLog } from './_components/RebalanceLog';
+import React from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useWeb3 } from "../../hooks/useWeb3";
+import { formatAddress } from "../../lib/utils";
+import { StatsCards } from "./_components/StatsCards";
+import { QuickActions } from "./_components/QuickActions";
+import { PortfolioChart } from "./_components/PortfolioChart";
+import { ChainAllocationTable } from "./_components/ChainAllocationTable";
+import { RebalanceLog } from "./_components/RebalanceLog";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useNavigate } from "react-router-dom";
 
 const DashboardPage: React.FC = () => {
-  const { user } = useAuth();
-  const { provider, isConnected } = useWeb3();
+  const { user, logout } = useAuth();
+  const { isConnected, disconnect } = useWeb3();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      if (isConnected) {
+        await disconnect(); // Wallet disconnect (RainbowKit adapter's signOut is often tied to this)
+      }
+      logout(); // App session logout
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      logout();
+      navigate("/");
+    }
+  };
 
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
-          <p className="opacity-70">You need to be logged in to view this page.</p>
+          <p className="opacity-70">
+            You need to be logged in to view this page.
+          </p>
         </div>
       </div>
     );
@@ -36,21 +54,27 @@ const DashboardPage: React.FC = () => {
                   Portfolio Dashboard
                 </h1>
                 <p className="text-lg font-secondary opacity-70 mt-2">
-                  Welcome back, {user.name || formatAddress(user.address || '')}
+                  Welcome back, {user.name || formatAddress(user.address || "")}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                <div className={`badge badge-lg ${user.role === ROLES.ADMIN ? 'badge-error' : user.role === ROLES.USER ? 'badge-primary' : 'badge-secondary'}`}>
-                  {user.role}
-                </div>
-                {provider && (
-                  <div className="badge badge-lg badge-accent">
-                    {provider}
-                  </div>
-                )}
-                <div className={`badge badge-lg ${isConnected ? 'badge-success' : 'badge-warning'}`}>
-                  {isConnected ? 'Connected' : 'Disconnected'}
-                </div>
+              <div className="flex items-center gap-2">
+                <ConnectButton />
+
+                {/* // logout button shoule be here */}
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-outline bg-red-500 text-white"
+                >
+                  Logout
+                </button>
+
+                {/* back to homepage button */}
+                <button
+                  onClick={() => navigate("/")}
+                  className="btn btn-primary"
+                >
+                  Back to Home
+                </button>
               </div>
             </div>
           </div>
@@ -112,23 +136,41 @@ const DashboardPage: React.FC = () => {
               {/* Portfolio Summary */}
               <div className="card bg-gradient-to-br from-primary/10 to-secondary/10 shadow-xl border border-primary/20">
                 <div className="card-body p-6">
-                  <h3 className="card-title text-xl font-primary mb-4 text-primary">Portfolio Summary</h3>
+                  <h3 className="card-title text-xl font-primary mb-4 text-primary">
+                    Portfolio Summary
+                  </h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-2 border-b border-primary/20">
-                      <span className="opacity-70 font-secondary font-medium">Total Value:</span>
-                      <span className="font-secondary font-bold text-success text-lg">$125,420.50</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Total Value:
+                      </span>
+                      <span className="font-secondary font-bold text-success text-lg">
+                        $125,420.50
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-primary/20">
-                      <span className="opacity-70 font-secondary font-medium">24h Change:</span>
-                      <span className="font-secondary font-bold text-success">+2.3%</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        24h Change:
+                      </span>
+                      <span className="font-secondary font-bold text-success">
+                        +2.3%
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-primary/20">
-                      <span className="opacity-70 font-secondary font-medium">Active Chains:</span>
-                      <span className="font-secondary font-bold text-info">4</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Active Chains:
+                      </span>
+                      <span className="font-secondary font-bold text-info">
+                        4
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="opacity-70 font-secondary font-medium">Avg APY:</span>
-                      <span className="font-secondary font-bold text-primary">8.7%</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Avg APY:
+                      </span>
+                      <span className="font-secondary font-bold text-primary">
+                        8.7%
+                      </span>
                     </div>
                   </div>
                 </div>

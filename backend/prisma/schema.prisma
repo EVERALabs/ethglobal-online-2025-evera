@@ -23,28 +23,51 @@ model User {
   email String? @unique
 
   // Password is now optional, as OAuth/SIWE/Privy don't use it.
-  password String?
+  // password String?
 
   // --- New Fields for Enhanced Auth ---
   // For Sign-in with Ethereum (SIWE)
-  walletAddress String? @unique
+  walletAddress String @unique
+  lastNonce     String
 
   // For Sign-in with Google (OAuth)
-  googleId String? @unique
+  // googleId String? @unique
 
   // For Sign-in with Privy
-  privyDid String? @unique
+  // privyDid String? @unique
   // ------------------------------------
 
-  role      UserRole
-  name      String?
-  avatarUrl String? // To store profile picture from Google/Privy
-  lastLogin DateTime?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-  notes     SimpleNote[]
+  role                     UserRole
+  name                     String?
+  avatarUrl                String? // To store profile picture from Google/Privy
+  lastLogin                DateTime?
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  ReservedWalletUserAccess ReservedWalletUserAccess[]
+  SimpleNote               SimpleNote[]
 
   @@map("user")
+}
+
+model ReservedWallet {
+  publicKey                String                     @id
+  privateKey               String
+  tags                     String[]
+  notes                    String
+  ReservedWalletUserAccess ReservedWalletUserAccess[]
+}
+
+model ReservedWalletUserAccess {
+  user                    User           @relation(fields: [userId], references: [id])
+  userId                  String
+  reservedWallet          ReservedWallet @relation(fields: [reservedWalletPublicKey], references: [publicKey])
+  reservedWalletPublicKey String
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  active                  Boolean        @default(true)
+
+  @@id([userId, reservedWalletPublicKey])
+  @@map("reserved_wallet_user_access")
 }
 
 model SimpleNote {
