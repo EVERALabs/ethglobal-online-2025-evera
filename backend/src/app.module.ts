@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { NotesModule } from './notes/notes.module';
 import { AdminModule } from './admin/admin.module';
+import { IndexerModule } from './indexer/indexer.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
@@ -54,6 +55,7 @@ import { StorageModule } from './storage/storage.module';
     UsersModule,
     NotesModule,
     AdminModule,
+    IndexerModule,
   ],
   controllers: [AppController],
   providers: [
