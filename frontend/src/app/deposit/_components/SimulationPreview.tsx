@@ -40,7 +40,7 @@ export const SimulationPreview: React.FC<SimulationPreviewProps> = ({ data, onCo
   };
 
   return (
-    <div className="bg-base-100/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-base-300/50">
+    <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
       <div className="flex items-center gap-3 mb-6">
         <span className="text-3xl">🔮</span>
         <h2 className="text-2xl font-bold">Simulation Preview</h2>
@@ -69,7 +69,7 @@ export const SimulationPreview: React.FC<SimulationPreviewProps> = ({ data, onCo
           <h3 className="font-bold text-lg mb-4">Projected Allocation</h3>
           <div className="space-y-3">
             {Object.entries(data.projectedAllocation).map(([chainId, percentage]) => (
-              <div key={chainId} className="flex items-center gap-4 p-3 bg-base-200/50 rounded-lg">
+              <div key={chainId} className="flex items-center gap-4 p-3 bg-white rounded-lg">
                 <span className="text-2xl">{getChainIcon(chainId)}</span>
                 <div className="flex-1">
                   <div className="flex justify-between items-center mb-1">
@@ -124,7 +124,7 @@ export const SimulationPreview: React.FC<SimulationPreviewProps> = ({ data, onCo
               <span>🌉</span>
               Bridge Path
             </h3>
-            <div className="flex items-center gap-2 p-3 bg-base-200/50 rounded-lg">
+            <div className="flex items-center gap-2 p-3 bg-white rounded-lg">
               {data.bridgePath.map((chainId, index) => (
                 <React.Fragment key={chainId}>
                   <div className="flex items-center gap-2">

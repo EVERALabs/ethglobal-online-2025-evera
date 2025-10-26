@@ -44,7 +44,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-base-100 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center gap-3 mb-6">
@@ -75,7 +75,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               <h3 className="font-bold text-lg mb-3">Allocation Breakdown</h3>
               <div className="space-y-2">
                 {Object.entries(data.projectedAllocation).map(([chainId, percentage]) => (
-                  <div key={chainId} className="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+                  <div key={chainId} className="flex items-center justify-between p-3 bg-white rounded-lg">
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{getChainIcon(chainId)}</span>
                       <span className="font-semibold">{getChainName(chainId)}</span>
@@ -119,7 +119,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {isAutoAllocation && (
               <div>
                 <h3 className="font-bold text-lg mb-3">Bridge Path</h3>
-                <div className="flex items-center gap-2 p-3 bg-base-200/50 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-white rounded-lg">
                   {data.bridgePath.map((chainId, index) => (
                     <React.Fragment key={chainId}>
                       <div className="flex items-center gap-2">

@@ -43,11 +43,11 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-base-200/30">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <div className="space-y-8">
           {/* Page Header */}
-          <div className="bg-base-100 rounded-2xl shadow-xl p-6 border border-base-300">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
                 <h1 className="text-4xl font-primary font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -106,6 +106,33 @@ const DashboardPage: React.FC = () => {
             </div>
 
             <div className="space-y-6">
+              {/* User Info Card */}
+              <div className="card bg-white shadow-xl border border-gray-200">
+                <div className="card-body p-6">
+                  <h3 className="card-title text-xl font-primary mb-4">Account Info</h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center py-2 border-b border-base-200">
+                      <span className="opacity-70 font-secondary font-medium">Name:</span>
+                      <span className="font-secondary font-semibold">{user.name || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-base-200">
+                      <span className="opacity-70 font-secondary font-medium">Email:</span>
+                      <span className="font-secondary font-semibold">{user.email || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-base-200">
+                      <span className="opacity-70 font-secondary font-medium">Address:</span>
+                      <span className="font-secondary font-mono text-sm font-semibold">
+                        {user.address ? formatAddress(user.address) : 'Not connected'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center py-2">
+                      <span className="opacity-70 font-secondary font-medium">Role:</span>
+                      <span className="badge badge-primary badge-lg">{user.role}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Portfolio Summary */}
               <div className="card bg-gradient-to-br from-primary/10 to-secondary/10 shadow-xl border border-primary/20">
                 <div className="card-body p-6">

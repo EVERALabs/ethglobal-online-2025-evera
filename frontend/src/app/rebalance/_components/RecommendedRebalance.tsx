@@ -85,7 +85,7 @@ export const RecommendedRebalance: React.FC = () => {
       case "high": return "text-error bg-error/10 border-error/20";
       case "medium": return "text-warning bg-warning/10 border-warning/20";
       case "low": return "text-success bg-success/10 border-success/20";
-      default: return "text-base-content bg-base-200";
+      default: return "text-black bg-white";
     }
   };
 
@@ -96,7 +96,7 @@ export const RecommendedRebalance: React.FC = () => {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl text-primary">
@@ -111,7 +111,7 @@ export const RecommendedRebalance: React.FC = () => {
           {recommendations.map((rec) => (
             <div
               key={rec.id}
-              className={`card bg-base-200 border-2 transition-all duration-200 cursor-pointer ${
+              className={`card bg-white border-2 transition-all duration-200 cursor-pointer ${
                 selectedRecommendation === rec.id 
                   ? 'border-primary shadow-lg' 
                   : 'border-transparent hover:border-primary/30'
@@ -137,19 +137,19 @@ export const RecommendedRebalance: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className="text-lg font-bold text-success">
                       +{rec.expectedGain}%
                     </div>
                     <div className="text-xs opacity-70">Expected Gain</div>
                   </div>
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className="text-lg font-bold text-info">
                       {rec.moves.length}
                     </div>
                     <div className="text-xs opacity-70">Moves</div>
                   </div>
-                  <div className="text-center p-2 bg-base-100 rounded">
+                  <div className="text-center p-2 bg-white rounded">
                     <div className="text-lg font-bold text-warning">
                       {rec.riskFactors.length}
                     </div>
@@ -164,7 +164,7 @@ export const RecommendedRebalance: React.FC = () => {
                       <h5 className="font-semibold mb-2 text-primary">Proposed Moves:</h5>
                       <div className="space-y-2">
                         {rec.moves.map((move, moveIndex) => (
-                          <div key={moveIndex} className="flex items-center justify-between p-3 bg-base-100 rounded-lg">
+                          <div key={moveIndex} className="flex items-center justify-between p-3 bg-white rounded-lg">
                             <div className="flex items-center gap-3">
                               <div className="badge badge-outline">
                                 {move.from} → {move.to}

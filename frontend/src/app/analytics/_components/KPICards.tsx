@@ -113,7 +113,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ timeframe }) => {
       {kpiItems.map((item, index) => (
         <div
           key={index}
-          className="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300"
+          className="card bg-white shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300"
         >
           <div className="card-body p-6">
             <div className="flex items-center justify-between mb-4">
