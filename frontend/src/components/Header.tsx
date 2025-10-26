@@ -9,6 +9,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 const navLinks = [
   // { name: "Dashboard", path: "/dashboard" },
   { name: "Deposit", path: "/deposit" },
+  { name: "Liquidity Pools", path: "/liquidity-pools" },
   { name: "Analytics", path: "/analytics" },
   { name: "Rebalance", path: "/rebalance" },
   { name: "Settings", path: "/settings" },
@@ -28,7 +29,7 @@ export const Header = () => {
 
   // Replace currentChain state with mock network info for visual enhancement
   const [currentNetwork, setCurrentNetwork] = useState({
-    name: "Base",
+    name: "Sepolia",
     color: "text-blue-600",
     bg: "bg-blue-50",
   });

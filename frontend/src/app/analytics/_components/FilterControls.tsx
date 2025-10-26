@@ -1,25 +1,21 @@
-import React from 'react';
+import React from "react";
 
 interface FilterControlsProps {
-  selectedTimeframe: '24h' | '7d' | '30d';
-  setSelectedTimeframe: (timeframe: '24h' | '7d' | '30d') => void;
+  selectedTimeframe: "24h" | "7d" | "30d";
+  setSelectedTimeframe: (timeframe: "24h" | "7d" | "30d") => void;
   selectedChains: string[];
   setSelectedChains: (chains: string[]) => void;
 }
 
 const CHAIN_OPTIONS = [
-  { id: 'base', name: 'Base', color: 'bg-blue-600' },
-  { id: 'arbitrum', name: 'Arbitrum', color: 'bg-blue-500' },
-  { id: 'polygon', name: 'Polygon', color: 'bg-purple-600' },
-  { id: 'ethereum', name: 'Ethereum', color: 'bg-gray-600' },
-  { id: 'optimism', name: 'Optimism', color: 'bg-red-600' },
-  { id: 'avalanche', name: 'Avalanche', color: 'bg-red-500' },
+  { id: "sepolia", name: "Sepolia Testnet", color: "bg-blue-600" },
+  { id: "hedera-testnet", name: "Hedera Testnet", color: "bg-green-500" },
 ];
 
 const TIMEFRAME_OPTIONS = [
-  { id: '24h', name: '24 Hours', description: 'Last 24 hours' },
-  { id: '7d', name: '7 Days', description: 'Last 7 days' },
-  { id: '30d', name: '30 Days', description: 'Last 30 days' },
+  { id: "24h", name: "24 Hours", description: "Last 24 hours" },
+  { id: "7d", name: "7 Days", description: "Last 7 days" },
+  { id: "30d", name: "30 Days", description: "Last 30 days" },
 ];
 
 export const FilterControls: React.FC<FilterControlsProps> = ({
@@ -30,14 +26,14 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
 }) => {
   const handleChainToggle = (chainId: string) => {
     if (selectedChains.includes(chainId)) {
-      setSelectedChains(selectedChains.filter(id => id !== chainId));
+      setSelectedChains(selectedChains.filter((id) => id !== chainId));
     } else {
       setSelectedChains([...selectedChains, chainId]);
     }
   };
 
   const handleSelectAllChains = () => {
-    setSelectedChains(CHAIN_OPTIONS.map(chain => chain.id));
+    setSelectedChains(CHAIN_OPTIONS.map((chain) => chain.id));
   };
 
   const handleClearAllChains = () => {
@@ -55,11 +51,13 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
               {TIMEFRAME_OPTIONS.map((option) => (
                 <button
                   key={option.id}
-                  onClick={() => setSelectedTimeframe(option.id as '24h' | '7d' | '30d')}
+                  onClick={() =>
+                    setSelectedTimeframe(option.id as "24h" | "7d" | "30d")
+                  }
                   className={`btn btn-sm ${
                     selectedTimeframe === option.id
-                      ? 'btn-primary'
-                      : 'btn-outline'
+                      ? "btn-primary"
+                      : "btn-outline"
                   }`}
                 >
                   {option.name}
@@ -67,7 +65,10 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
               ))}
             </div>
             <p className="text-xs opacity-70 mt-2">
-              {TIMEFRAME_OPTIONS.find(opt => opt.id === selectedTimeframe)?.description}
+              {
+                TIMEFRAME_OPTIONS.find((opt) => opt.id === selectedTimeframe)
+                  ?.description
+              }
             </p>
           </div>
 
@@ -90,7 +91,7 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
                 </button>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap gap-2">
               {CHAIN_OPTIONS.map((chain) => (
                 <button
@@ -98,8 +99,8 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
                   onClick={() => handleChainToggle(chain.id)}
                   className={`btn btn-sm ${
                     selectedChains.includes(chain.id)
-                      ? 'btn-primary'
-                      : 'btn-outline'
+                      ? "btn-primary"
+                      : "btn-outline"
                   }`}
                 >
                   <div className={`w-2 h-2 rounded-full ${chain.color}`} />
@@ -110,12 +111,13 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
                 </button>
               ))}
             </div>
-            
+
             <p className="text-xs opacity-70 mt-2">
-              {selectedChains.length === 0 
-                ? 'Select chains to compare' 
-                : `${selectedChains.length} chain${selectedChains.length > 1 ? 's' : ''} selected`
-              }
+              {selectedChains.length === 0
+                ? "Select chains to compare"
+                : `${selectedChains.length} chain${
+                    selectedChains.length > 1 ? "s" : ""
+                  } selected`}
             </p>
           </div>
         </div>
@@ -124,26 +126,25 @@ export const FilterControls: React.FC<FilterControlsProps> = ({
         <div className="mt-6 pt-6 border-t border-base-200">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold">
-                {selectedChains.length}
-              </div>
+              <div className="text-2xl font-bold">{selectedChains.length}</div>
               <div className="text-xs opacity-70">Chains</div>
             </div>
             <div>
-              <div className="text-2xl font-bold">
-                {selectedTimeframe}
-              </div>
+              <div className="text-2xl font-bold">{selectedTimeframe}</div>
               <div className="text-xs opacity-70">Period</div>
             </div>
             <div>
               <div className="text-2xl font-bold">
-                {selectedChains.length > 0 ? 'Live' : '--'}
+                {selectedChains.length > 0 ? "Live" : "--"}
               </div>
               <div className="text-xs opacity-70">Status</div>
             </div>
             <div>
               <div className="text-2xl font-bold">
-                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {new Date().toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </div>
               <div className="text-xs opacity-70">Updated</div>
             </div>

@@ -54,7 +54,7 @@ const DashboardPage: React.FC = () => {
                   Portfolio Dashboard
                 </h1>
                 <p className="text-lg font-secondary opacity-70 mt-2">
-                  Welcome back, {user.name || formatAddress(user.address || "")}
+                  Welcome back, {user.name || "Mark Austin"}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -109,25 +109,43 @@ const DashboardPage: React.FC = () => {
               {/* User Info Card */}
               <div className="card bg-white shadow-xl border border-gray-200">
                 <div className="card-body p-6">
-                  <h3 className="card-title text-xl font-primary mb-4">Account Info</h3>
+                  <h3 className="card-title text-xl font-primary mb-4">
+                    Account Info
+                  </h3>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">Name:</span>
-                      <span className="font-secondary font-semibold">{user.name || 'Not set'}</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Name:
+                      </span>
+                      <span className="font-secondary font-semibold">
+                        {user.name || "Not set"}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">Email:</span>
-                      <span className="font-secondary font-semibold">{user.email || 'Not set'}</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Email:
+                      </span>
+                      <span className="font-secondary font-semibold">
+                        {user.email || "Not set"}
+                      </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-base-200">
-                      <span className="opacity-70 font-secondary font-medium">Address:</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Address:
+                      </span>
                       <span className="font-secondary font-mono text-sm font-semibold">
-                        {user.address ? formatAddress(user.address) : 'Not connected'}
+                        {user.address
+                          ? formatAddress(user.address)
+                          : "Not connected"}
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="opacity-70 font-secondary font-medium">Role:</span>
-                      <span className="badge badge-primary badge-lg">{user.role}</span>
+                      <span className="opacity-70 font-secondary font-medium">
+                        Role:
+                      </span>
+                      <span className="badge badge-primary badge-lg">
+                        {user.role}
+                      </span>
                     </div>
                   </div>
                 </div>

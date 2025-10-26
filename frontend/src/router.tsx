@@ -12,6 +12,7 @@ import SettingsPage from "./app/settings";
 import VaultDetailPage from "./app/vault-detail";
 import AboutPage from "./app/about";
 import AdminPage from "./app/admin";
+import LiquidityPoolsPage from "./app/liquidity-pools";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +95,14 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <AboutPage />,
+      },
+      {
+        path: "liquidity-pools",
+        element: (
+          <ProtectedRoute requiredRoles={[ROLES.ADMIN, ROLES.USER]}>
+            <LiquidityPoolsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "contact",

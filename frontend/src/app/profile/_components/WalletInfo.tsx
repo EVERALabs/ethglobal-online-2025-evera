@@ -72,11 +72,11 @@ export const WalletInfo: React.FC<WalletInfoProps> = ({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="opacity-70">Network:</span>
-              <span>Ethereum Mainnet</span>
+              <span>Sepolia Testnet</span>
             </div>
             <div className="flex justify-between">
               <span className="opacity-70">Chain ID:</span>
-              <span>1</span>
+              <span>11155111</span>
             </div>
             <div className="flex justify-between">
               <span className="opacity-70">Balance:</span>

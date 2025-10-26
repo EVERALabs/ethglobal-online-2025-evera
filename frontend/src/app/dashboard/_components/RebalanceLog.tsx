@@ -15,58 +15,70 @@ interface RebalanceLogProps {
   className?: string;
 }
 
-export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) => {
+export const RebalanceLog: React.FC<RebalanceLogProps> = ({
+  className = "",
+}) => {
   // Mock data - in real app, this would come from API
   const rebalanceEntries: RebalanceEntry[] = [
     {
       id: "1",
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-      percentageMoved: 5.2,
-      fromChain: "Ethereum",
-      toChain: "Arbitrum",
-      amount: 6521.84,
+      timestamp: new Date(),
+      percentageMoved: 10,
+      fromChain: "Sepolia Testnet",
+      toChain: "Hedera Testnet",
+      amount: 100,
       status: "completed",
-      txHash: "0x1234...5678",
+      txHash: "0x1234567890abcdef",
     },
     {
       id: "2",
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
-      percentageMoved: 3.1,
-      fromChain: "Polygon",
-      toChain: "Base",
-      amount: 3888.92,
-      status: "completed",
-      txHash: "0xabcd...efgh",
+      timestamp: new Date(),
+      percentageMoved: 20,
+      fromChain: "Hedera Testnet",
+      toChain: "Sepolia Testnet",
+      amount: 200,
+      status: "pending",
+      txHash: "0x1234567890abcdef",
     },
     {
       id: "3",
-      timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
-      percentageMoved: 2.8,
-      fromChain: "Arbitrum",
-      toChain: "Ethereum",
-      amount: 3511.76,
-      status: "completed",
-      txHash: "0x9876...5432",
+      timestamp: new Date(),
+      percentageMoved: 30,
+      fromChain: "Sepolia Testnet",
+      toChain: "Hedera Testnet",
+      amount: 300,
+      status: "failed",
+      txHash: "0x1234567890abcdef",
     },
     {
       id: "4",
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-      percentageMoved: 4.5,
-      fromChain: "Base",
-      toChain: "Polygon",
-      amount: 5642.33,
+      timestamp: new Date(),
+      percentageMoved: 40,
+      fromChain: "Hedera Testnet",
+      toChain: "Sepolia Testnet",
+      amount: 400,
       status: "completed",
-      txHash: "0x5678...9abc",
+      txHash: "0x1234567890abcdef",
     },
     {
       id: "5",
-      timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-      percentageMoved: 1.9,
-      fromChain: "Ethereum",
-      toChain: "Base",
-      amount: 2383.45,
+      timestamp: new Date(),
+      percentageMoved: 50,
+      fromChain: "Sepolia Testnet",
+      toChain: "Hedera Testnet",
+      amount: 500,
+      status: "pending",
+      txHash: "0x1234567890abcdef",
+    },
+    {
+      id: "6",
+      timestamp: new Date(),
+      percentageMoved: 60,
+      fromChain: "Hedera Testnet",
+      toChain: "Sepolia Testnet",
+      amount: 600,
       status: "completed",
-      txHash: "0xdef0...1234",
+      txHash: "0x1234567890abcdef",
     },
   ];
 
@@ -100,10 +112,14 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+    const diffInHours = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
+    );
+
     if (diffInHours < 1) {
-      const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+      const diffInMinutes = Math.floor(
+        (now.getTime() - date.getTime()) / (1000 * 60)
+      );
       return `${diffInMinutes}m ago`;
     } else if (diffInHours < 24) {
       return `${diffInHours}h ago`;
@@ -114,13 +130,13 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
   };
 
   return (
-    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
+    <div
+      className={`card bg-white shadow-xl border border-gray-200 ${className}`}
+    >
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Recent Rebalance Log</h3>
-          <div className="text-sm opacity-70">
-            Last 7 days
-          </div>
+          <div className="text-sm opacity-70">Last 7 days</div>
         </div>
 
         <div className="space-y-4">
@@ -131,22 +147,24 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
             >
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-center">
-                  <div className="text-2xl">{getChainIcon(entry.fromChain)}</div>
+                  <div className="text-2xl">
+                    {getChainIcon(entry.fromChain)}
+                  </div>
                   <div className="text-xs opacity-70">From</div>
                 </div>
-                
+
                 <div className="flex flex-col items-center">
                   <div className="text-lg">→</div>
                   <div className="text-xs opacity-70">
                     {entry.percentageMoved}%
                   </div>
                 </div>
-                
+
                 <div className="flex flex-col items-center">
                   <div className="text-2xl">{getChainIcon(entry.toChain)}</div>
                   <div className="text-xs opacity-70">To</div>
                 </div>
-                
+
                 <div className="ml-4">
                   <div className="font-semibold">
                     {entry.fromChain} → {entry.toChain}
@@ -156,22 +174,22 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <div className="text-sm font-medium">
-                    {entry.timestamp.toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                    {entry.timestamp.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </div>
                   <div className="text-xs opacity-70">
                     {formatTimeAgo(entry.timestamp)}
                   </div>
                 </div>
-                
+
                 {getStatusBadge(entry.status)}
-                
+
                 {entry.txHash && (
                   <button className="btn btn-ghost btn-sm">
                     <svg
@@ -206,19 +224,28 @@ export const RebalanceLog: React.FC<RebalanceLogProps> = ({ className = "" }) =>
           </div>
           <div>
             <div className="text-lg font-bold text-success">
-              {rebalanceEntries.filter(e => e.status === "completed").length}
+              {rebalanceEntries.filter((e) => e.status === "completed").length}
             </div>
             <div className="text-sm opacity-70">Completed</div>
           </div>
           <div>
             <div className="text-lg font-bold text-info">
-              {(rebalanceEntries.reduce((sum, entry) => sum + entry.percentageMoved, 0) / rebalanceEntries.length).toFixed(1)}%
+              {(
+                rebalanceEntries.reduce(
+                  (sum, entry) => sum + entry.percentageMoved,
+                  0
+                ) / rebalanceEntries.length
+              ).toFixed(1)}
+              %
             </div>
             <div className="text-sm opacity-70">Avg Movement</div>
           </div>
           <div>
             <div className="text-lg font-bold text-warning">
-              ${rebalanceEntries.reduce((sum, entry) => sum + entry.amount, 0).toLocaleString()}
+              $
+              {rebalanceEntries
+                .reduce((sum, entry) => sum + entry.amount, 0)
+                .toLocaleString()}
             </div>
             <div className="text-sm opacity-70">Total Moved</div>
           </div>
