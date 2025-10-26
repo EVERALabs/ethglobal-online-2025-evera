@@ -12,36 +12,24 @@ interface PortfolioChartProps {
   className?: string;
 }
 
-export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }) => {
+export const PortfolioChart: React.FC<PortfolioChartProps> = ({
+  className = "",
+}) => {
   // Mock data - in real app, this would come from API
   const chainData: ChainData[] = [
     {
-      chain: "Ethereum",
+      chain: "Sepolia Testnet",
       allocation: 35.2,
       volume: 44148.18,
       color: "#627EEA",
       icon: "⟠",
     },
     {
-      chain: "Arbitrum",
+      chain: "Hedera Testnet",
       allocation: 28.7,
       volume: 36000.68,
       color: "#28A0F0",
       icon: "🔷",
-    },
-    {
-      chain: "Polygon",
-      allocation: 22.1,
-      volume: 27717.93,
-      color: "#8247E5",
-      icon: "⬟",
-    },
-    {
-      chain: "Base",
-      allocation: 14.0,
-      volume: 17553.71,
-      color: "#0052FF",
-      icon: "🔵",
     },
   ];
 
@@ -50,7 +38,9 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
   // Calculate cumulative percentage for pie chart segments
 
   return (
-    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
+    <div
+      className={`card bg-white shadow-xl border border-gray-200 ${className}`}
+    >
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Portfolio Distribution</h3>
@@ -74,10 +64,11 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
                   const radius = 40;
                   const circumference = 2 * Math.PI * radius;
                   const strokeDasharray = circumference;
-                  const strokeDashoffset = circumference - (chain.allocation / 100) * circumference;
-                  
+                  const strokeDashoffset =
+                    circumference - (chain.allocation / 100) * circumference;
+
                   return (
-                    <circle 
+                    <circle
                       key={index}
                       cx="50"
                       cy="50"
@@ -148,13 +139,16 @@ export const PortfolioChart: React.FC<PortfolioChartProps> = ({ className = "" }
           </div>
           <div>
             <div className="text-lg font-bold text-success">
-              {chainData.reduce((sum, chain) => sum + chain.allocation, 0).toFixed(1)}%
+              {chainData
+                .reduce((sum, chain) => sum + chain.allocation, 0)
+                .toFixed(1)}
+              %
             </div>
             <div className="text-sm opacity-70">Total Allocation</div>
           </div>
           <div>
             <div className="text-lg font-bold text-warning">
-              {Math.max(...chainData.map(c => c.allocation)).toFixed(1)}%
+              {Math.max(...chainData.map((c) => c.allocation)).toFixed(1)}%
             </div>
             <div className="text-sm opacity-70">Max Single Chain</div>
           </div>

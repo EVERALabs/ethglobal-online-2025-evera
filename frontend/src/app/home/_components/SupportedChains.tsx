@@ -1,71 +1,23 @@
-import React from 'react';
+import React from "react";
 
 export const SupportedChains: React.FC = () => {
   const chains = [
     {
-      name: 'Base',
-      logo: '🔵',
-      color: 'from-blue-500 to-blue-600',
-      tvl: '$1.2M',
-      yield: '15.2%',
-      status: 'active'
+      name: "Sepolia Testnet",
+      logo: "🔷",
+      color: "from-blue-500 to-blue-600",
+      tvl: "$1.2M",
+      yield: "8.5%",
+      status: "active",
     },
     {
-      name: 'Arbitrum',
-      logo: '🔷',
-      color: 'from-cyan-500 to-blue-500',
-      tvl: '$890K',
-      yield: '13.8%',
-      status: 'active'
+      name: "Hedera Testnet",
+      logo: "🟢",
+      color: "from-green-500 to-emerald-500",
+      tvl: "$800K",
+      yield: "9.2%",
+      status: "active",
     },
-    {
-      name: 'Ethereum',
-      logo: '💎',
-      color: 'from-gray-500 to-gray-600',
-      tvl: '$340K',
-      yield: '12.1%',
-      status: 'active'
-    },
-    {
-      name: 'Optimism',
-      logo: '🔴',
-      color: 'from-red-500 to-pink-500',
-      tvl: '$680K',
-      yield: '14.6%',
-      status: 'active'
-    },
-    {
-      name: 'Polygon',
-      logo: '🟣',
-      color: 'from-purple-500 to-indigo-500',
-      tvl: '$420K',
-      yield: '13.2%',
-      status: 'active'
-    },
-    {
-      name: 'Linea',
-      logo: '🟢',
-      color: 'from-green-500 to-emerald-500',
-      tvl: '$180K',
-      yield: '11.8%',
-      status: 'active'
-    },
-    {
-      name: 'Scroll',
-      logo: '📜',
-      color: 'from-orange-500 to-yellow-500',
-      tvl: '$95K',
-      yield: '10.9%',
-      status: 'coming-soon'
-    },
-    {
-      name: 'Blast',
-      logo: '💥',
-      color: 'from-yellow-500 to-orange-500',
-      tvl: '$0',
-      yield: 'TBD',
-      status: 'coming-soon'
-    }
   ];
 
   return (
@@ -76,23 +28,24 @@ export const SupportedChains: React.FC = () => {
             Supported Chains
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Seamlessly manage liquidity across the most popular Layer 2 networks and emerging chains
+            Seamlessly manage liquidity across the most popular Layer 2 networks
+            and emerging chains
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {chains.map((chain) => (
-            <div 
+            <div
               key={chain.name}
               className={`relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-2 ${
-                chain.status === 'active' 
-                  ? 'border-gray-100 hover:border-gray-200' 
-                  : 'border-gray-200 opacity-75'
+                chain.status === "active"
+                  ? "border-gray-100 hover:border-gray-200"
+                  : "border-gray-200 opacity-75"
               } group`}
             >
               {/* Status Badge */}
               <div className="absolute -top-2 -right-2">
-                {chain.status === 'active' ? (
+                {chain.status === "active" ? (
                   <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
@@ -104,7 +57,9 @@ export const SupportedChains: React.FC = () => {
               </div>
 
               {/* Chain Logo */}
-              <div className={`w-16 h-16 bg-gradient-to-br ${chain.color} rounded-2xl flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-110 transition-transform duration-300`}>
+              <div
+                className={`w-16 h-16 bg-gradient-to-br ${chain.color} rounded-2xl flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-110 transition-transform duration-300`}
+              >
                 {chain.logo}
               </div>
 
@@ -117,19 +72,25 @@ export const SupportedChains: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">TVL</span>
-                  <span className="text-sm font-semibold text-gray-900">{chain.tvl}</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {chain.tvl}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">APY</span>
-                  <span className="text-sm font-semibold text-green-600">{chain.yield}</span>
+                  <span className="text-sm font-semibold text-green-600">
+                    {chain.yield}
+                  </span>
                 </div>
               </div>
 
               {/* Coming Soon Overlay */}
-              {chain.status === 'coming-soon' && (
+              {chain.status === "coming-soon" && (
                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                   <div className="text-center">
-                    <div className="text-orange-500 font-semibold">Coming Soon</div>
+                    <div className="text-orange-500 font-semibold">
+                      Coming Soon
+                    </div>
                     <div className="text-xs text-gray-500">Q2 2024</div>
                   </div>
                 </div>

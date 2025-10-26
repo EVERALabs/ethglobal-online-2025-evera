@@ -29,7 +29,7 @@ export const Header = () => {
 
   // Replace currentChain state with mock network info for visual enhancement
   const [currentNetwork, setCurrentNetwork] = useState({
-    name: "Base",
+    name: "Sepolia",
     color: "text-blue-600",
     bg: "bg-blue-50",
   });

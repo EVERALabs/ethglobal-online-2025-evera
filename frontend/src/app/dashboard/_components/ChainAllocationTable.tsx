@@ -16,51 +16,31 @@ interface ChainAllocationTableProps {
   className?: string;
 }
 
-export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({ 
-  className = "" 
+export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
+  className = "",
 }) => {
   const navigate = useNavigate();
 
   // Mock data - in real app, this would come from API
   const chainAllocations: ChainAllocation[] = [
     {
-      id: "eth",
-      chain: "Ethereum",
-      allocation: 35.2,
+      id: "sepolia",
+      chain: "Sepolia Testnet",
+      allocation: 65.3,
       volume: 44148.18,
-      apy: 9.2,
-      color: "#627EEA",
-      icon: "⟠",
-      status: "active",
-    },
-    {
-      id: "arb",
-      chain: "Arbitrum",
-      allocation: 28.7,
-      volume: 36000.68,
       apy: 8.5,
-      color: "#28A0F0",
+      color: "#627EEA",
       icon: "🔷",
       status: "active",
     },
     {
-      id: "poly",
-      chain: "Polygon",
-      allocation: 22.1,
+      id: "hedera",
+      chain: "Hedera Testnet",
+      allocation: 34.7,
       volume: 27717.93,
-      apy: 7.8,
-      color: "#8247E5",
-      icon: "⬟",
-      status: "active",
-    },
-    {
-      id: "base",
-      chain: "Base",
-      allocation: 14.0,
-      volume: 17553.71,
-      apy: 8.9,
-      color: "#0052FF",
-      icon: "🔵",
+      apy: 9.2,
+      color: "#00D4AA",
+      icon: "🟢",
       status: "active",
     },
   ];
@@ -77,7 +57,7 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
 
   const handleViewDetails = () => {
     // Navigate to vault detail page with vault ID 1 (main vault)
-    navigate('/vault/1');
+    navigate("/vault/1");
   };
 
   const getStatusBadge = (status: string) => {
@@ -94,21 +74,41 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
   };
 
   return (
-    <div className={`card bg-white shadow-xl border border-gray-200 ${className}`}>
+    <div
+      className={`card bg-white shadow-xl border border-gray-200 ${className}`}
+    >
       <div className="card-body p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="card-title text-xl">Chain Allocation</h3>
           <div className="flex items-center gap-4">
             <div className="text-sm opacity-70">
-              Total: ${chainAllocations.reduce((sum, chain) => sum + chain.volume, 0).toLocaleString()}
+              Total: $
+              {chainAllocations
+                .reduce((sum, chain) => sum + chain.volume, 0)
+                .toLocaleString()}
             </div>
             <button
               onClick={handleViewDetails}
               className="btn btn-primary btn-sm"
             >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              <svg
+                className="w-4 h-4 mr-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
               </svg>
               View Details
             </button>
@@ -150,7 +150,11 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
                       {chain.allocation}%
                     </div>
                     <div className="text-sm opacity-70">
-                      {chain.allocation > 30 ? "High" : chain.allocation > 20 ? "Medium" : "Low"}
+                      {chain.allocation > 30
+                        ? "High"
+                        : chain.allocation > 20
+                        ? "Medium"
+                        : "Low"}
                     </div>
                   </td>
                   <td className="text-right">
@@ -158,13 +162,19 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
                       ${chain.volume.toLocaleString()}
                     </div>
                     <div className="text-sm opacity-70">
-                      {((chain.volume / chainAllocations.reduce((sum, c) => sum + c.volume, 0)) * 100).toFixed(1)}% of total
+                      {(
+                        (chain.volume /
+                          chainAllocations.reduce(
+                            (sum, c) => sum + c.volume,
+                            0
+                          )) *
+                        100
+                      ).toFixed(1)}
+                      % of total
                     </div>
                   </td>
                   <td className="text-right">
-                    <div className="font-bold text-success">
-                      {chain.apy}%
-                    </div>
+                    <div className="font-bold text-success">{chain.apy}%</div>
                     <div className="text-sm opacity-70">
                       {chain.apy > 8.5 ? "High yield" : "Standard"}
                     </div>
@@ -207,19 +217,26 @@ export const ChainAllocationTable: React.FC<ChainAllocationTableProps> = ({
           </div>
           <div>
             <div className="text-lg font-bold text-success">
-              {(chainAllocations.reduce((sum, chain) => sum + chain.apy, 0) / chainAllocations.length).toFixed(1)}%
+              {(
+                chainAllocations.reduce((sum, chain) => sum + chain.apy, 0) /
+                chainAllocations.length
+              ).toFixed(1)}
+              %
             </div>
             <div className="text-sm opacity-70">Avg APY</div>
           </div>
           <div>
             <div className="text-lg font-bold text-warning">
-              {Math.max(...chainAllocations.map(c => c.allocation)).toFixed(1)}%
+              {Math.max(...chainAllocations.map((c) => c.allocation)).toFixed(
+                1
+              )}
+              %
             </div>
             <div className="text-sm opacity-70">Max Allocation</div>
           </div>
           <div>
             <div className="text-lg font-bold text-primary">
-              {chainAllocations.filter(c => c.status === "active").length}
+              {chainAllocations.filter((c) => c.status === "active").length}
             </div>
             <div className="text-sm opacity-70">Active</div>
           </div>

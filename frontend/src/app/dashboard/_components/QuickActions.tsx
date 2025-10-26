@@ -10,7 +10,7 @@ export const QuickActions: React.FC<QuickActionsProps> = () => {
   const navigate = useNavigate();
 
   const handleDeposit = () => {
-    navigate('/deposit');
+    navigate("/deposit");
   };
 
   const handleWithdraw = () => {
@@ -32,7 +32,7 @@ export const QuickActions: React.FC<QuickActionsProps> = () => {
     <div className="card bg-white shadow-xl border border-gray-200">
       <div className="card-body p-6">
         <h3 className="card-title text-xl mb-6">Quick Actions</h3>
-        
+
         {/* Primary Actions */}
         <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6">
           <button
@@ -44,7 +44,7 @@ export const QuickActions: React.FC<QuickActionsProps> = () => {
               <div className="font-semibold">Deposit More</div>
             </div>
           </button>
-          
+
           <button
             onClick={handleWithdraw}
             className="btn btn-primary btn-lg flex items-center gap-3"
@@ -67,7 +67,7 @@ export const QuickActions: React.FC<QuickActionsProps> = () => {
               <div className="font-semibold">Trigger Rebalance</div>
             </div>
           </button>
-          
+
           <button
             onClick={handleEmergencyWithdraw}
             className="btn btn-outline btn-error flex items-center gap-3"
@@ -87,7 +87,7 @@ export const QuickActions: React.FC<QuickActionsProps> = () => {
             <div className="text-sm opacity-70">Available to Deposit</div>
           </div>
           <div>
-            <div className="text-lg font-bold text-info">4</div>
+            <div className="text-lg font-bold text-info">2</div>
             <div className="text-sm opacity-70">Active Chains</div>
           </div>
           <div>
