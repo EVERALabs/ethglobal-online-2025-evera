@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
       localStorage.removeItem(AUTH_CONFIG.STORAGE_KEYS.ROLE);
 
       // Redirect to login or dispatch logout action
-      window.location.href = "/login";
+      window.location.href = "/";
     }
 
     return Promise.reject(error);
