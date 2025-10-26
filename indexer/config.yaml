@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: envio-indexer
+networks:
+  - id: 11155111
+    start_block: 9488810 # Replace with your desired block number
+    contracts:
+      - name: PositionManagerRouter
+        address:
+          - 0x695ca33d58Db7b2E7f9De150419034C8b09c980E
+          - 0xdEe6d63946E0b80598D7e5a92a2FFf5C2632a9D0
+        handler: src/EventHandlers.ts
+        events:
+          - event: Initialized(uint64 version)
+          - event: MintedPosition(uint256 indexed tokenId, address indexed owner, address token0, address token1, uint24 fee, address pool)
+          - event: NFTMinted(address owner, uint256 tokenId)
+          - event: PositionCreated(address owner, uint256 tokenId, uint256 amount0, uint256 amount1)
+unordered_multichain_mode: true
+preload_handlers: true
