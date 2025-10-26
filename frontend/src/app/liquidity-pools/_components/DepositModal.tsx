@@ -2,20 +2,24 @@ import React, { useState, useEffect } from 'react';
 import type { PoolData } from '../index';
 import { usePositionContract } from '../../../hooks/usePosition';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { formatUnits, parseUnits, type Address, maxUint256 } from 'viem';
+import { formatUnits, parseUnits, maxUint256 } from 'viem';
 import { ERC20ABI } from '../../../lib/contracts/abi/ERC20';
+import { LIQUIDITY_POOL_CONFIG } from '../../../lib/contracts/liquidityPoolConfig';
 
 interface DepositModalProps {
   pool: PoolData;
   onClose: () => void;
 }
 
+// Extract config constants
+const { MOCK_USDC_ADDRESS, MOCK_ETH_ADDRESS, UNISWAP_V3_POOL_ADDRESS, MINT_PARAMS } = LIQUIDITY_POOL_CONFIG;
+
 export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => {
-  const [amount0, setAmount0] = useState('');
-  const [amount1, setAmount1] = useState('');
+  // Only amount1 (mockETH amount in e6 decimals) is user input
+  // amount0 (mockUSDC) is hardcoded to 1e18
+  const [ethAmount, setEthAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [needsApproval0, setNeedsApproval0] = useState(false);
-  const [needsApproval1, setNeedsApproval1] = useState(false);
+  const [needsApprovalETH, setNeedsApprovalETH] = useState(false);
 
   const { address } = useAccount();
   const {
@@ -27,10 +31,6 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
     contractAddress,
   } = usePositionContract();
 
-  // Token addresses (these should come from pool data in production)
-  const token0Address = pool.tokenAddresses?.token0 as Address;
-  const token1Address = pool.tokenAddresses?.token1 as Address;
-
   const {
     writeContractAsync: writeContractERC20Async,
     data: approvalHash,
@@ -40,71 +40,43 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
     hash: approvalHash,
   });
 
-  // Read token0 balance and allowance
-  const { data: token0Balance } = useReadContract({
-    address: token0Address,
+  // Read mockETH balance and allowance (only mockETH needs user input and approval)
+  const { data: ethBalance } = useReadContract({
+    address: MOCK_ETH_ADDRESS,
     abi: ERC20ABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
     query: {
-      enabled: !!address && !!token0Address,
+      enabled: !!address && !!MOCK_ETH_ADDRESS,
     },
   });
 
-  const { data: allowance0, refetch: refetchAllowance0 } = useReadContract({
-    address: token0Address,
+  const { data: allowanceETH, refetch: refetchAllowanceETH } = useReadContract({
+    address: MOCK_ETH_ADDRESS,
     abi: ERC20ABI,
     functionName: 'allowance',
     args: address && contractAddress ? [address, contractAddress] : undefined,
     query: {
-      enabled: !!address && !!contractAddress && !!token0Address,
+      enabled: !!address && !!contractAddress && !!MOCK_ETH_ADDRESS,
     },
   });
 
-  // Read token1 balance and allowance
-  const { data: token1Balance } = useReadContract({
-    address: token1Address,
-    abi: ERC20ABI,
-    functionName: 'balanceOf',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!address && !!token1Address,
-    },
-  });
-
-  const { data: allowance1, refetch: refetchAllowance1 } = useReadContract({
-    address: token1Address,
-    abi: ERC20ABI,
-    functionName: 'allowance',
-    args: address && contractAddress ? [address, contractAddress] : undefined,
-    query: {
-      enabled: !!address && !!contractAddress && !!token1Address,
-    },
-  });
-
-  // Check if approvals are needed
+  // Check if mockETH approval is needed
   useEffect(() => {
-    if (amount0 && allowance0 !== undefined && contractAddress) {
-      const amountInWei = parseUnits(amount0, 18);
-      const isMaxApproval = allowance0 >= maxUint256 - BigInt(1000);
-      setNeedsApproval0(!isMaxApproval && allowance0 < amountInWei);
+    if (ethAmount && allowanceETH !== undefined && contractAddress) {
+      // User input is in e6 decimals, need to check if approval is needed
+      const amountInWei = parseUnits(ethAmount, MINT_PARAMS.AMOUNT1_DECIMALS);
+      const isMaxApproval = allowanceETH >= maxUint256 - BigInt(1000);
+      setNeedsApprovalETH(!isMaxApproval && allowanceETH < amountInWei);
     }
-  }, [amount0, allowance0, contractAddress]);
+  }, [ethAmount, allowanceETH, contractAddress]);
 
-  useEffect(() => {
-    if (amount1 && allowance1 !== undefined && contractAddress) {
-      const amountInWei = parseUnits(amount1, 18);
-      const isMaxApproval = allowance1 >= maxUint256 - BigInt(1000);
-      setNeedsApproval1(!isMaxApproval && allowance1 < amountInWei);
-    }
-  }, [amount1, allowance1, contractAddress]);
-
-  const handleApprove = async (tokenAddress: Address, isToken0: boolean) => {
+  const handleApproveETH = async () => {
     if (!contractAddress) return;
 
     try {
       await writeContractERC20Async({
-        address: tokenAddress,
+        address: MOCK_ETH_ADDRESS,
         abi: ERC20ABI,
         functionName: 'approve',
         args: [contractAddress, maxUint256],
@@ -112,11 +84,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
 
       // Refetch allowance after approval
       setTimeout(() => {
-        if (isToken0) {
-          refetchAllowance0();
-        } else {
-          refetchAllowance1();
-        }
+        refetchAllowanceETH();
       }, 2000);
     } catch (error) {
       console.error('Approval failed:', error);
@@ -125,8 +93,14 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
   };
 
   const handleDeposit = async () => {
-    if (!amount0 || !amount1) {
-      alert('Please fill in both token amounts');
+    if (!ethAmount) {
+      alert(`Please enter mockETH amount (max ${MINT_PARAMS.MAX_AMOUNT1})`);
+      return;
+    }
+
+    const ethAmountNumber = Number.parseFloat(ethAmount);
+    if (ethAmountNumber <= 0 || ethAmountNumber >= MINT_PARAMS.MAX_AMOUNT1) {
+      alert(`mockETH amount must be greater than 0 and less than ${MINT_PARAMS.MAX_AMOUNT1}`);
       return;
     }
 
@@ -135,40 +109,42 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
       return;
     }
 
-    if (!pool.poolAddress) {
-      alert('Pool address not configured');
-      return;
-    }
-
-    if (needsApproval0) {
-      await handleApprove(token0Address, true);
-      return;
-    }
-
-    if (needsApproval1) {
-      await handleApprove(token1Address, false);
+    if (needsApprovalETH) {
+      await handleApproveETH();
       return;
     }
 
     setIsProcessing(true);
 
     try {
-      const amount0Desired = parseUnits(amount0, 18);
-      const amount1Desired = parseUnits(amount1, 18);
+      /**
+       * Arguments as specified by smart contract team:
+       * 1. msg.sender
+       * 2. mockUSDC (token0) - hardcoded address
+       * 3. mockETH (token1) - hardcoded address
+       * 4. 3000 (fee) - hardcoded
+       * 5. 1e18 (amount0Desired) - hardcoded for mockUSDC
+       * 6. decimal e6 but below 3900e6 (amount1Desired) - user input for mockETH
+       * 7. 1 (type_)
+       * 8. address uniswapV3Pool
+       */
+      
+      const amount0Desired = MINT_PARAMS.AMOUNT0_DESIRED; // 1e18 (hardcoded for mockUSDC)
+      const amount1Desired = parseUnits(ethAmount, MINT_PARAMS.AMOUNT1_DECIMALS); // User input in e6 decimals for mockETH
       const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600); // 1 hour from now
 
       await mintPosition(
         {
-          owner: address,
-          token0: token0Address,
-          token1: token1Address,
-          fee: pool.fee || 3000,
-          amount0Desired,
-          amount1Desired,
+          owner: address, // 1. msg.sender
+          token0: MOCK_USDC_ADDRESS, // 2. mockUSDC
+          token1: MOCK_ETH_ADDRESS, // 3. mockETH
+          fee: MINT_PARAMS.FEE, // 4. 3000
+          amount0Desired, // 5. 1e18
+          amount1Desired, // 6. < 3900e6
           deadline,
         },
-        0, // type_ - rebalance type
-        pool.poolAddress as Address
+        MINT_PARAMS.TYPE, // 7. 1
+        UNISWAP_V3_POOL_ADDRESS // 8. uniswapV3Pool address
       );
     } catch (error) {
       console.error('Deposit failed:', error);
@@ -215,47 +191,50 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
 
         {/* Form */}
         <div className="space-y-4">
-          {/* Token 0 Input */}
+          {/* Info: mockUSDC Amount (Hardcoded - Display Only) */}
           <div>
-            <label className="block text-slate-300 mb-2">
-              {pool.pair.token0} Amount
+            <label htmlFor="mockUSDCAmount" className="block text-slate-300 mb-2">
+              mockUSDC Amount (Fixed)
             </label>
             <div className="relative">
               <input
-                type="number"
-                step="0.000001"
-                placeholder="0.00"
-                value={amount0}
-                onChange={(e) => setAmount0(e.target.value)}
-                className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                id="mockUSDCAmount"
+                type="text"
+                value="1e18"
+                disabled
+                className="w-full bg-slate-700/50 text-slate-400 rounded-lg px-4 py-3 cursor-not-allowed"
               />
-              {token0Balance && (
-                <div className="text-xs text-slate-400 mt-1">
-                  Balance: {formatUnits(token0Balance, 18)} {pool.pair.token0}
-                </div>
-              )}
+              <div className="text-xs text-slate-400 mt-1">
+                mockUSDC amount is fixed at 1e18 (hardcoded)
+              </div>
             </div>
           </div>
 
-          {/* Token 1 Input */}
+          {/* User Input: mockETH Amount (in e6 decimals, < 3900) */}
           <div>
-            <label className="block text-slate-300 mb-2">
-              {pool.pair.token1} Amount
+            <label htmlFor="mockETHAmount" className="block text-slate-300 mb-2">
+              mockETH Amount (Max: {MINT_PARAMS.MAX_AMOUNT1})
             </label>
             <div className="relative">
               <input
+                id="mockETHAmount"
                 type="number"
-                step="0.000001"
+                step="0.01"
+                min="0"
+                max={MINT_PARAMS.MAX_AMOUNT1 - 0.01}
                 placeholder="0.00"
-                value={amount1}
-                onChange={(e) => setAmount1(e.target.value)}
+                value={ethAmount}
+                onChange={(e) => setEthAmount(e.target.value)}
                 className="w-full bg-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              {token1Balance && (
+              {ethBalance && (
                 <div className="text-xs text-slate-400 mt-1">
-                  Balance: {formatUnits(token1Balance, 18)} {pool.pair.token1}
+                  Balance: {formatUnits(ethBalance, MINT_PARAMS.AMOUNT1_DECIMALS)} mockETH
                 </div>
               )}
+              <div className="text-xs text-yellow-400 mt-1">
+                ⚠️ Must be less than {MINT_PARAMS.MAX_AMOUNT1} (will be converted to e6 decimals)
+              </div>
             </div>
           </div>
 
@@ -283,8 +262,9 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
             <button
               onClick={handleDeposit}
               disabled={
-                !amount0 ||
-                !amount1 ||
+                !ethAmount ||
+                Number.parseFloat(ethAmount) <= 0 ||
+                Number.parseFloat(ethAmount) >= MINT_PARAMS.MAX_AMOUNT1 ||
                 isProcessing ||
                 isPending ||
                 isConfirming ||
@@ -303,8 +283,7 @@ export const DepositModal: React.FC<DepositModalProps> = ({ pool, onClose }) => 
                     </span>
                   );
                 }
-                if (needsApproval0) return `Approve ${pool.pair.token0}`;
-                if (needsApproval1) return `Approve ${pool.pair.token1}`;
+                if (needsApprovalETH) return 'Approve mockETH';
                 return 'Deposit';
               })()}
             </button>
